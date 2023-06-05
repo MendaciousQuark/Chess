@@ -6,5 +6,5 @@ This personal project focuses on developing an AI-powered chess engine capable o
 - Self-play and Learning: The AI will be designed to play against itself, facilitating continuous learning and improvement through iterative gameplay.
 - Programming Skill Development: This project serves as an opportunity to sharpen programming skills, particularly in implementing complex algorithms and data structures required for chess AI.
 - Demonstration of OOP: The project will emphasize OOP principles, including encapsulation, inheritance, and polymorphism, to ensure clean and       maintainable code.
-- GitHub Showcase: Through this project, GitHub will be utilized for version control, collaboration, and demonstrating proficiency in using Git features like branches, pull requests, and issue tracking.
+- GitHub Showcase: Throughout this project, GitHub will be utilized for version control, collaboration, and demonstrating proficiency in using Git features like branches, pull requests, and issue tracking.
 
