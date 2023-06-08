@@ -7,15 +7,15 @@ public class Human  extends Player
   }
 
   @Override
-  protected void validateMove()
+  protected void validateMove(Move move)
   {
-    super.validateMove();
+    super.validateMove(move);
   }
 
   @Override
-  protected void makeMove(Move move)
+  protected void makeMove()
   {
-    super.makeMove(move);
+    super.makeMove();
   }
 
 }

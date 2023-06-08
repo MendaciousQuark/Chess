@@ -9,12 +9,12 @@ public class Player
     this.colour = colour;
   }
 
-  protected void makeMove(Move move)
+  protected void makeMove()
   {
 
   }
 
-  protected void validateMove()
+  protected void validateMove(Move move)
   {
 
   }
