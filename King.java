@@ -1,5 +1,6 @@
 public class King extends Piece
 {
+
   private boolean moved, inCheck;
 
   King(int posX, int posY, boolean colour, int value)
