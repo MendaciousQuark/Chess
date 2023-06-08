@@ -16,6 +16,27 @@ public class Game {
   {
   }
 
+  public int getTurn()
+  {
+    return turn;
+  }
+
+  public Board getBoard()
+  {
+    return board;
+  }
+
+  public Player getHuman()
+  {
+    return human;
+  }
+
+  public Bot getBot()
+  {
+    return bot;
+  }
+
+
   public static void main(String[] args) {
     Game game = new Game();
   }
