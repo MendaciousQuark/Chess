@@ -9,6 +9,10 @@ public class Board
   {
     init();
   }
+  Board(String fen){
+    init();
+    setUp(fen);
+  }
   Board(Square[][] board)
   {
     this.board = board;
@@ -21,11 +25,14 @@ public class Board
     return "FEN";
   }
 
-  private  void init()
+  private void init()
   {
     //initialise board
   }
 
+  private Square[][] setUp(String fen){
+    return board;
+  }
   public void Display(Board board){}
 
   public double evaluate()
@@ -38,9 +45,9 @@ public class Board
     return board;
   }
 
-  public void setBoard(Square[][] board)
+  public void setBoard(String fen)
   {
-    this.board = board;
+    this.board = setUp(fen);
   }
 
 }
