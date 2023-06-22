@@ -1,11 +1,11 @@
 public class Square
 {
 
-  int posX;
-  int posY;
-  boolean colour;
-  boolean occupied;
-  Piece piece;
+  public int posX;
+  public int posY;
+  public boolean colour;
+  public boolean occupied;
+  public Piece piece;
 
   Square(int posX, int posY, boolean colour, Piece piece)
   {

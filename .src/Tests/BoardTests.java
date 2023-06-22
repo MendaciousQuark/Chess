@@ -25,7 +25,7 @@ public class BoardTests
       expectedColour = i % 2 == 0;
       for(Square square: row)
       {
-        Assertions.assertEquals(square.colour, expectedColour);
+        Assertions.assertEquals(expectedColour, square.colour);
         expectedColour = !expectedColour;
       }
       i++;
