@@ -17,6 +17,20 @@ public class BoardTests
     Assertions.assertNotNull(boardArray);
     Assertions.assertEquals(8, boardArray.length);
     Assertions.assertEquals(8, boardArray[0].length);
+
+    int i = 0;
+    boolean expectedColour;
+    for(Square[] row: boardArray)
+    {
+      expectedColour = i % 2 == 0;
+      for(Square square: row)
+      {
+        Assertions.assertEquals(square.colour, expectedColour);
+        expectedColour = !expectedColour;
+      }
+      i++;
+    }
+
   }
 
   @Test
