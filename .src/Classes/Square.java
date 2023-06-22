@@ -5,6 +5,7 @@ public class Square
   int posY;
   boolean colour;
   boolean occupied;
+  Piece piece;
 
   Square(int posX, int posY, boolean colour, Piece piece)
   {
@@ -12,6 +13,7 @@ public class Square
     this.posY = posY;
     this.colour = colour;
     this.occupied = true;
+    this.piece = piece;
   }
 
   Square(int posX, int posY, boolean colour)
