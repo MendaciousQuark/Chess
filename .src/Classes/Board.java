@@ -9,7 +9,7 @@ public class Board
   }
   Board(String fen){
     init();
-    this.board = setUp(fen);
+    setUp(fen);
   }
   Board(Square[][] board)
   {
@@ -81,8 +81,71 @@ public class Board
     return piece;
   }
 
-  private Square[][] setUp(String fen){
-    return board;
+  private void setUp(String fen)
+  {
+    int i = 0, j = 0;
+    boolean colour;
+    char[] fenArray = fen.toCharArray();
+    for(char element: fenArray)
+    {
+      if(element == ' ')
+      {
+        break;
+      }
+
+      switch(element)
+      {
+        case 1, 2, 3, 4, 5, 6, 7, 8:
+          for(int k = j; k < element - j; k++)
+          {
+            board[i][j].occupied = false;
+            board[i][j].piece = null;
+            j++;
+          }
+          break;
+        case 'K', 'k':
+          colour = element == 'K';
+          board[i][j].occupied = true;
+          board[i][j].piece = new King(i, j, colour, 100);
+          j++;
+          break;
+        case 'Q', 'q':
+          colour = element == 'Q';
+          board[i][j].occupied = true;
+          board[i][j].piece = new Queen(i, j, colour, 9);
+          j++;
+          break;
+        case 'B', 'b':
+          colour = element == 'B';
+          board[i][j].occupied = true;
+          board[i][j].piece = new Bishop(i, j, colour, 3);
+          j++;
+          break;
+        case 'N', 'n':
+          colour = element == 'N';
+          board[i][j].occupied = true;
+          board[i][j].piece = new Knight(i, j, colour, 3);
+          j++;
+          break;
+        case 'R', 'r':
+          colour = element == 'R';
+          board[i][j].occupied = true;
+          board[i][j].piece = new Rook(i, j, colour, 5);
+          j++;
+          break;
+        case 'P', 'p':
+          colour = element == 'P';
+          board[i][j].occupied = true;
+          board[i][j].piece = new Pawn(i, j, colour, 1);
+          j++;
+          break;
+      }
+      if(j > 7)
+      {
+        i++;
+        j = 0;
+      }
+    }
   }
   public void Display(Board board){}
 
@@ -98,7 +161,7 @@ public class Board
 
   public void setBoard(String fen)
   {
-    this.board = setUp(fen);
+    setUp(fen);
   }
 
 }
