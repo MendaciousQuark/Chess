@@ -38,10 +38,12 @@ public class BoardTests
   @Test
   public void testToString() {
     String fen = board.toString();
-    Assertions.assertEquals("FEN", fen);
-    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR w KQkq - 0 1");
+    Assertions.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", fen);
+    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR");
     fen = board.toString();
-    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR w KQkq - 0 1", fen);
+    StringBuilder sb = new StringBuilder();
+    Square[][] test = board.getBoard();
+    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR", fen);
   }
 
   @Test
@@ -62,20 +64,6 @@ public class BoardTests
     {
       for(Square square: row)
       {
-/*
-        if(i < 17 && square.occupied)
-        {
-          Assertions.assertFalse(square.piece.colour);
-        }
-        else if (i > 46 && square.occupied)
-        {
-          Assertions.assertTrue(square.piece.colour);
-        }
-        else
-        {
-          Assertions.assertFalse(square.occupied);
-        }
-*/
 
         if((i > 7 && i < 15) || (i > 47 && i < 55))
         {

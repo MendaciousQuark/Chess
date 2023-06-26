@@ -20,7 +20,37 @@ public class Board
   @Override
   public String toString()
   {
-    return "FEN";
+    StringBuilder fen = new StringBuilder();
+
+    int emptySquares = 0;
+    for(int i = 0; i < 8; i++)
+    {
+      for(int j = 0; j < 8; j++)
+      {
+        if(board[i][j].occupied)
+        {
+          if(emptySquares > 0)
+          {
+            fen.append(emptySquares);
+            emptySquares = 0;
+          }
+          fen.append(board[i][j].piece.getName());
+        }
+        else
+        {
+          emptySquares++;
+        }
+      }
+      if(emptySquares > 0)
+      {
+        fen.append(emptySquares);
+        emptySquares = 0;
+      }
+      fen.append("/");
+    }
+
+    fen.deleteCharAt(fen.length() - 1);
+    return fen.toString();
   }
 
   private void init()
@@ -83,6 +113,64 @@ public class Board
 
   private void setUp(String fen)
   {
+    String[] fenParts = fen.split(" ");
+    String boardPart = fenParts[0];
+
+    int i = 0, j = 0;
+    for (char c : boardPart.toCharArray()) {
+      if (c == '/') {
+        i++;
+        j = 0;
+      } else if (Character.isDigit(c)) {
+        int emptySquares = Character.getNumericValue(c);
+        for (int k = 0; k < emptySquares; k++) {
+          board[i][j].occupied = false;
+          board[i][j].piece = null;
+          j++;
+        }
+      } else
+      {
+        boolean isUpperCase = Character.isUpperCase(c);
+        char pieceCode = Character.toLowerCase(c);
+        boolean isOccupied = true;
+        int value;
+        switch(pieceCode)
+        {
+          case 'k' -> {
+            value = 100;
+            board[i][j].piece = new King(i, j, isUpperCase, value);
+          }
+          case 'q' -> {
+            value = 9;
+            board[i][j].piece = new Queen(i, j, isUpperCase, value);
+          }
+          case 'b' -> {
+            value = 3;
+            board[i][j].piece = new Bishop(i, j, isUpperCase, value);
+          }
+          case 'n' -> {
+            value = 3;
+            board[i][j].piece = new Knight(i, j, isUpperCase, value);
+          }
+          case 'r' -> {
+            value = 5;
+            board[i][j].piece = new Rook(i, j, isUpperCase, value);
+          }
+          case 'p' -> {
+            value = 1;
+            board[i][j].piece = new Pawn(i, j, isUpperCase, value);
+          }
+          default -> isOccupied = false;
+        }
+
+        board[i][j].occupied = isOccupied;
+        j++;
+      }
+    }
+  }
+/*
+  private void setUp(String fen)
+  {
     int i = 0, j = 0;
     boolean colour;
     char[] fenArray = fen.toCharArray();
@@ -95,8 +183,8 @@ public class Board
 
       switch(element)
       {
-        case 1, 2, 3, 4, 5, 6, 7, 8:
-          for(int k = j; k < element - j; k++)
+        case '1', '2', '3', '4', '5', '6', '7', '8':
+          for(int k = j; k < (element-48); k++)
           {
             board[i][j].occupied = false;
             board[i][j].piece = null;
@@ -146,8 +234,27 @@ public class Board
         j = 0;
       }
     }
+    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    StringBuilder sb = new StringBuilder();
+    for(i = 0; i < 8; i++)
+    {
+      for(j = 0; j< 8; j++)
+      {
+        if(board[i][j].occupied)
+        {
+          sb.append(board[i][j].piece.getName());
+        }
+        else
+        {
+          sb.append("-");
+        }
+      }
+      System.out.println(sb.toString());
+      sb.delete(0, sb.length());
+    }
   }
-  public void Display(Board board){}
+*/
+public void Display(Board board){}
 
   public double evaluate()
   {
