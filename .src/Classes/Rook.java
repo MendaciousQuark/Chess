@@ -10,4 +10,11 @@ public class Rook extends Piece
   {
 
   }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "R":"r";
+  }
+
 }

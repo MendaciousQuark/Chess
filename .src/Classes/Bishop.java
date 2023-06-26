@@ -11,4 +11,9 @@ public class Bishop extends Piece
 
   }
 
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "B":"b";
+  }
 }
