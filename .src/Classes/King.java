@@ -15,4 +15,10 @@ public class King extends Piece
   {
 
   }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "K":"k";
+  }
 }
