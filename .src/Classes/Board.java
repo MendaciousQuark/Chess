@@ -254,7 +254,13 @@ public class Board
     }
   }
 */
-public void Display(Board board){}
+public String[] Display()
+{
+  String[] displayBoard = new String[26];
+
+
+  return displayBoard;
+}
 
   public double evaluate()
   {

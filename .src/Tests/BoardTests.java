@@ -89,7 +89,71 @@ public class BoardTests
   public void testDisplay() {
     // Implement the test to verify if the Display method displays the board correctly
     // Redirect the output to a string and compare it with the expected board representation
-    // initially do ascii representation
+    board.setBoard("8/8/8/8/8/8/8/8");
+    String[] displayBoard = board.Display();
+    String[] expectedOutput = {
+        "__h___g___f___e___d___c___b___a___",
+        "  |****    ****    ****    ****    |",
+        "1 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "2 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "3 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "4 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "5 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "6 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "7 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "8 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |_a___b___c___d___e___f___g___h__|"
+    };
+
+    Assertions.assertArrayEquals(expectedOutput, displayBoard);
+
+    board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    expectedOutput = new String[]{
+        "__h___g___f___e___d___c___b___a___",
+        "  |****    ****    ****    ****    |",
+        "1 |*rr* nn *bb* qq *kk* bb *nn* rr |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "2 | pp *pp* pp *pp* pp *pp* pp *pp*|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "3 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "4 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "5 |****    ****    ****    ****    |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "6 |    ****    ****    ****    ****|",
+        "  |    ****    ****    ****    ****|",
+        "  |****    ****    ****    ****    |",
+        "7 |*PP* PP *PP* PP *PP* PP *PP* PP |",
+        "  |****    ****    ****    ****    |",
+        "  |    ****    ****    ****    ****|",
+        "8 | RR *NN* BB *QQ* KK *BB* NN *RR*|",
+        "  |    ****    ****    ****    ****|",
+        "  |_a___b___c___d___e___f___g___h__|"
+    };
+
+    displayBoard = board.Display();
+    Assertions.assertArrayEquals(expectedOutput, displayBoard);
   }
 
   @Test
