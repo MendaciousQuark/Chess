@@ -168,99 +168,78 @@ public class Board
       }
     }
   }
-/*
-  private void setUp(String fen)
-  {
-    int i = 0, j = 0;
-    boolean colour;
-    char[] fenArray = fen.toCharArray();
-    for(char element: fenArray)
-    {
-      if(element == ' ')
-      {
-        break;
-      }
 
-      switch(element)
+  public String[] Display()
+  {
+    String[] displayBoard = new String[26];
+
+    StringBuilder sb = new StringBuilder();
+    displayBoard[0] = "  __h___g___f___e___d___c___b___a___\n";
+    for(int i = 0; i < 8; i++)
+    {
+      if(i % 2 == 0)
       {
-        case '1', '2', '3', '4', '5', '6', '7', '8':
-          for(int k = j; k < (element-48); k++)
+        for(int j = 0; j < 3; j++)
+        {
+          if(j == 1)
           {
-            board[i][j].occupied = false;
-            board[i][j].piece = null;
-            j++;
+            sb.append(i + 1).append(" |").append(middleLine(true, i)).append("|\n");
           }
-          break;
-        case 'K', 'k':
-          colour = element == 'K';
-          board[i][j].occupied = true;
-          board[i][j].piece = new King(i, j, colour, 100);
-          j++;
-          break;
-        case 'Q', 'q':
-          colour = element == 'Q';
-          board[i][j].occupied = true;
-          board[i][j].piece = new Queen(i, j, colour, 9);
-          j++;
-          break;
-        case 'B', 'b':
-          colour = element == 'B';
-          board[i][j].occupied = true;
-          board[i][j].piece = new Bishop(i, j, colour, 3);
-          j++;
-          break;
-        case 'N', 'n':
-          colour = element == 'N';
-          board[i][j].occupied = true;
-          board[i][j].piece = new Knight(i, j, colour, 3);
-          j++;
-          break;
-        case 'R', 'r':
-          colour = element == 'R';
-          board[i][j].occupied = true;
-          board[i][j].piece = new Rook(i, j, colour, 5);
-          j++;
-          break;
-        case 'P', 'p':
-          colour = element == 'P';
-          board[i][j].occupied = true;
-          board[i][j].piece = new Pawn(i, j, colour, 1);
-          j++;
-          break;
+          else
+          {
+            sb.append(" ").append(" |").append("****    ****    ****    ****    |\n");
+          }
+          displayBoard[(((i*3)+j)+1)] = sb.toString();
+          sb.delete(0,sb.length());
+        }
       }
-      if(j > 7)
+      else
       {
-        i++;
-        j = 0;
+        for(int j = 0; j < 3; j++)
+        {
+          if(j == 1)
+          {
+            sb.append(i + 1).append(" |").append(middleLine(false, i)).append("|\n");
+          }
+          else
+          {
+            sb.append(" ").append(" |").append("    ****    ****    ****    ****|\n");
+          }
+          displayBoard[(((i*3)+j)+1)] = sb.toString();
+          sb.delete(0,sb.length());
+        }
       }
     }
-    System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+    displayBoard[25] = "  |_a___b___c___d___e___f___g___h__|\n";
+
+    return displayBoard;
+  }
+
+  private String middleLine(boolean colour, int row)
+  {
     StringBuilder sb = new StringBuilder();
-    for(i = 0; i < 8; i++)
+    for(int i = 0; i < 8; i++)
     {
-      for(j = 0; j< 8; j++)
+      if(this.board[row][i].occupied)
       {
-        if(board[i][j].occupied)
+        if(colour)
         {
-          sb.append(board[i][j].piece.getName());
+          sb.append("*").append(board[row][i].piece.getName()).append(board[row][i].piece.getName()).append("*");
         }
         else
         {
-          sb.append("-");
+          sb.append(" ").append(board[row][i].piece.getName()).append(board[row][i].piece.getName()).append(" ");
         }
       }
-      System.out.println(sb.toString());
-      sb.delete(0, sb.length());
+      else
+      {
+        String square = (colour) ? "****":"    ";
+        sb.append(square);
+      }
+      colour = !colour;
     }
+    return sb.toString();
   }
-*/
-public String[] Display()
-{
-  String[] displayBoard = new String[26];
-
-
-  return displayBoard;
-}
 
   public double evaluate()
   {
