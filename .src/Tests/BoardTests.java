@@ -89,6 +89,7 @@ public class BoardTests
   public void testDisplay() {
     // Implement the test to verify if the Display method displays the board correctly
     // Redirect the output to a string and compare it with the expected board representation
+    // initially do ascii representation
   }
 
   @Test
