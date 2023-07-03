@@ -42,5 +42,5 @@ public abstract class Piece
     return this.colour == other.colour &&
            this.value == other.value;
   }
-
+  
 }

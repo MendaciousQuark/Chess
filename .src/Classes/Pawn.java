@@ -22,5 +22,5 @@ public class Pawn extends Piece
   {
     return (this.colour) ? "P":"p";
   }
-
+  
 }
