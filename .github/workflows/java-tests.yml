@@ -18,7 +18,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: "14"
-          distribution: "openjdk"
+          distribution: "adopt"
       - name: Build project
         run: |
           Get-ChildItem -Recurse -Filter "*.java" | ForEach-Object { $_.FullName } > sources.txt
