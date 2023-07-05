@@ -1,7 +1,8 @@
 public class King extends Piece
 {
 
-  private boolean moved, inCheck;
+  private final boolean moved;
+  private boolean inCheck;
 
   King(int posX, int posY, boolean colour, int value)
   {
@@ -14,5 +15,11 @@ public class King extends Piece
   protected void findMoves()
   {
 
+  }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "K":"k";
   }
 }

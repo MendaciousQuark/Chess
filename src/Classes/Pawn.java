@@ -16,4 +16,11 @@ public class Pawn extends Piece
   {
 
   }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "P":"p";
+  }
+  
 }

@@ -23,4 +23,24 @@ public abstract class Piece
 
   protected abstract void findMoves();
 
+  @Override
+  public boolean equals(Object obj)
+  {
+    if(this == obj)
+    {
+      return false;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+
+    return sameAttributes((Piece) obj);
+  }
+
+  private boolean sameAttributes(Piece other)
+  {
+    return this.colour == other.colour &&
+           this.value == other.value;
+  }
+  
 }

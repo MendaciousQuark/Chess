@@ -11,4 +11,11 @@ public class Knight extends Piece
   {
 
   }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "N":"n";
+  }
+
 }

@@ -11,4 +11,11 @@ public class Queen extends Piece
   {
 
   }
+
+  @Override
+  protected String getName()
+  {
+    return (this.colour) ? "Q":"q";
+  }
+
 }
