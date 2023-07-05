@@ -22,7 +22,8 @@ jobs:
       - name: Build project
         run: |
           dir /s /B *.java > sources.txt
-          javac @sources.txt
+          $sources = Get-Content sources.txt
+          javac $sources
       - name: Run tests
         run: |
           java -cp . org.junit.runner.JUnitCore $(dir /s /B *Test.class | sed 's/\.class$//; s/\\/\./g')
