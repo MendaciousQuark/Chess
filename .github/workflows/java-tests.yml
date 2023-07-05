@@ -21,7 +21,7 @@ jobs:
           distribution: "adopt"
       - name: Build project
         run: |
-          dir /s /B *.java > sources.txt
+          Get-ChildItem -Recurse -Filter "*.java" | Select-String -Pattern ".*" -AllMatches | Foreach-Object { $_.Matches.Value } > sources.txt
           $sources = Get-Content sources.txt
           javac $sources
       - name: Run tests
