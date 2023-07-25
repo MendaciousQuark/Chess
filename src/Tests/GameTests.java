@@ -19,4 +19,54 @@ public class GameTests
     Assertions.assertNotNull(game.getHuman());
     Assertions.assertNotNull(game.getBot());
   }
+
+  @Test
+  public void testPromotions()
+  {}
+
+  @Test
+  public void testMovingPieces()
+  {
+
+  }
+
+  @Test
+  public void testCastling()
+  {
+  }
+
+  @Test
+  public void testCapturingPieces()
+  {}
+
+  @Test
+  public void testEnPassant()
+  {}
+  @Test
+  public void testCheck()
+  {}
+
+  @Test
+  public void testCheckmate()
+  {
+  }
+
+  @Test
+  public void testStalemate()
+  {}
+
+  @Test
+  public void testGameProgression()
+  {}
+
+  @Test
+  public void testGameTermination() {
+    // Implement test to verify game termination.
+  }
+
+  @Test
+  public void testIllegalMoves() {
+    // Implement test to verify illegal moves.
+  }
+
 }
