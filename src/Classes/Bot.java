@@ -20,8 +20,8 @@ public class Bot  extends Player
   }
 
   @Override
-  protected void makeMove()
+  protected void getMove()
   {
-    super.makeMove();
+    super.getMove();
   }
 }

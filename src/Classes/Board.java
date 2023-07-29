@@ -3,11 +3,12 @@ public class Board
 
   private Square[][] board = new Square[8][8];
 
-  Board()
+  public  Board()
   {
     init();
   }
-  Board(String fen){
+  public Board(String fen)
+  {
     init();
     setUp(fen);
   }
@@ -15,7 +16,6 @@ public class Board
   {
     this.board = board;
   }
-
 
   @Override
   public String toString()
@@ -241,6 +241,10 @@ public class Board
     return sb.toString();
   }
 
+  public boolean isValidCoordinate(int row, int col) {
+    return row >= 0 && row < 8 && col >= 0 && col < 8;
+  }
+
   public double evaluate()
   {
     return 0.0;
@@ -249,6 +253,11 @@ public class Board
   public Square[][] getBoard()
   {
     return board;
+  }
+
+  public Square getSquare(int row, int col)
+  {
+    return board[row][col];
   }
 
   public void setBoard(String fen)

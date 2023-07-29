@@ -7,7 +7,7 @@ public class Queen extends Piece
   }
 
   @Override
-  protected void findMoves()
+  protected void findMoves(Board board, int turn, boolean check)
   {
 
   }

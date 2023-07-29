@@ -25,4 +25,5 @@ public class Move
     this.draw = draw;
     this.fen = board.toString();
   }
+
 }

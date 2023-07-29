@@ -28,6 +28,11 @@ public class Square
     this.piece = null;
   }
 
+  public boolean isOccupiedByOpponent(boolean colour)
+  {
+    return this.occupied && this.colour;
+  }
+
   @Override
   public boolean equals(Object obj)
   {

@@ -21,7 +21,7 @@ public abstract class Piece
     return "Piece";
   }
 
-  protected abstract void findMoves();
+  protected abstract void findMoves(Board board, int turn, boolean check);
 
   @Override
   public boolean equals(Object obj)
