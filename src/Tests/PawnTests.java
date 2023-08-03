@@ -183,26 +183,26 @@ public class PawnTests
     board.setBoard("rnbqkbnr/1p4pp/3p4/p1p1ppP1/1PPP4/8/P3PP1P/RNBQKBNR");
 
     // Obtain the pawn that can perform En passant and the pawn that can be captured by En passant
-    Pawn pawn = (Pawn) board.getSquare(4, 6).piece;
-    Pawn enPassantPawn = (Pawn) board.getSquare(4, 5).piece;
+    Pawn pawn = (Pawn) board.getSquare(3, 6).piece;
+    Pawn enPassantPawn = (Pawn) board.getSquare(3, 5).piece;
 
     // Set the En passant flag on the enPassantPawn to indicate that it can be captured by En passant
     enPassantPawn.setEnPassant(true);
 
     // Modify the board to update the position of the enPassantPawn after setting the En passant flag
-    board.getSquare(4, 5).piece = enPassantPawn;
+    board.getSquare(3, 5).piece = enPassantPawn;
 
     // Calculate available moves for the pawn
     pawn.findMoves(board, turn, false);
 
     // Define the expected En passant moves for the pawn in this scenario
-    int[] start = setStart(4, 6);
-    int[] end = setEnd(5, 5);
-    Move move1 = new Move(board, start, end, pawn, true, turn, true, false, false, false);
+    int[] start = setStart(3, 6);
+    int[] end = setEnd(2, 5);
+    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
-    start = setStart(4, 6);
-    end = setEnd(5, 6);
-    Move move2 = new Move(board, start, end, pawn, true, turn, true, false, false, false);
+    start = setStart(3, 6);
+    end = setEnd(2, 7);
+    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -213,26 +213,26 @@ public class PawnTests
     board.setBoard("rnbqkbnr/1p4pp/3p4/p1p2pP1/1PPPpP2/8/P3P2P/RNBQKBNR");
 
     // Obtain the new pawn that can perform En passant and the new pawn that can be captured by En passant
-    pawn = (Pawn) board.getSquare(3, 4).piece;
-    enPassantPawn = (Pawn) board.getSquare(3, 5).piece;
+    pawn = (Pawn) board.getSquare(4, 4).piece;
+    enPassantPawn = (Pawn) board.getSquare(4, 5).piece;
 
     // Set the En passant flag on the new enPassantPawn
     enPassantPawn.setEnPassant(true);
 
     // Modify the board to update the position of the new enPassantPawn after setting the En passant flag
-    board.getSquare(3, 5).piece = enPassantPawn;
+    board.getSquare(4, 5).piece = enPassantPawn;
 
     // Calculate available moves for the pawn in this scenario
     pawn.findMoves(board, turn, false);
 
     // Define the expected En passant move for the pawn in this scenario
-    start = setStart(3, 4);
-    end = setEnd(2, 5);
-    Move move3 = new Move(board, start, end, pawn, true, turn, true, false, false, false);
+    start = setStart(4, 4);
+    end = setEnd(5, 5);
+    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
-    start = setStart(3, 4);
-    end = setEnd(2, 3);
-    Move move4 = new Move(board, start, end, pawn, true, turn, true, false, false, false);
+    start = setStart(4, 4);
+    end = setEnd(5, 3);
+    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant move
     Assertions.assertEquals(2, pawn.moves.size());

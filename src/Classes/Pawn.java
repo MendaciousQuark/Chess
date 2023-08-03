@@ -15,7 +15,8 @@ public class Pawn extends Piece
     int nextRow = colour ? posX - 1 : posX + 1;
 
     // Check if the square in front of the pawn is empty
-    if (board.isValidCoordinate(nextRow, posY) && !board.getSquare(nextRow, posY).occupied) {
+    if (board.isValidCoordinate(nextRow, posY) && !board.getSquare(nextRow, posY).occupied)
+    {
       // Add a regular move (no capture)
       int[] start = {posX, posY};
       int[] end = {nextRow, posY};
@@ -23,9 +24,11 @@ public class Pawn extends Piece
       moves.add(move);
 
       // Check if it's the first move for the pawn (two squares forward is possible)
-      if (isFirstMove()) {
+      if (isFirstMove())
+      {
         int doubleNextRow = colour ? posX - 2 : posX + 2;
-        if (board.isValidCoordinate(doubleNextRow, posY) && !board.getSquare(doubleNextRow, posY).occupied) {
+        if (board.isValidCoordinate(doubleNextRow, posY) && !board.getSquare(doubleNextRow, posY).occupied)
+        {
           // Add a double step move (no capture)
           int[] doubleStepEnd = {doubleNextRow, posY};
           Move doubleStepMove = new Move(board, start, doubleStepEnd, this, colour, turn, false, check, false, false);
@@ -35,11 +38,14 @@ public class Pawn extends Piece
     }
 
     // Check if capturing diagonally is possible
-    for (int colOffset : new int[]{-1, 1}) {
+    for (int colOffset : new int[]{-1, 1})
+    {
       int nextCol = posY + colOffset;
-      if (board.isValidCoordinate(nextRow, nextCol)) {
+      if (board.isValidCoordinate(nextRow, nextCol))
+      {
         Square targetSquare = board.getSquare(nextRow, nextCol);
-        if (targetSquare.occupied && targetSquare.piece.colour != colour) {
+        if (targetSquare.occupied && targetSquare.piece.colour != colour)
+        {
           // Add a capture move
           int[] start = {posX, posY};
           int[] end = {nextRow, nextCol};
@@ -49,6 +55,26 @@ public class Pawn extends Piece
       }
     }
 
+    for(int colOffset : new int[]{-1, 1})
+    {
+      int nextCol = posY + colOffset;
+      if(board.isValidCoordinate(posX, nextCol))
+      {
+        Square targetSquare = board.getSquare(posX, nextCol);
+        if(targetSquare.occupied && targetSquare.piece.colour != colour &&
+           targetSquare.piece instanceof Pawn targetPawn)
+        {
+          if(targetPawn.enPassant)
+          {
+            int [] start = {posX, posY};
+            int ColorModifier = colour? -1:+1;
+            int [] end = {posX + ColorModifier, nextCol};
+            Move enPassantMove = new Move(board, start, end, this, colour, turn, true, check, false, false);
+            moves.add(enPassantMove);
+          }
+        }
+      }
+    }
     // Check for en passant moves
     // Implement this logic to detect en passant moves and add them to the moves list
     // ...
