@@ -28,7 +28,7 @@ public abstract class Piece
   {
     if(this == obj)
     {
-      return false;
+      return true;
     }
     if (obj == null || getClass() != obj.getClass()) {
       return false;

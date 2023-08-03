@@ -34,6 +34,19 @@ public class Square
   }
 
   @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Square{\n");
+    sb.append("  posX=").append(posX).append(",\n");
+    sb.append("  posY=").append(posY).append(",\n");
+    sb.append("  colour=").append(colour ? "White" : "Black").append(",\n");
+    sb.append("  occupied=").append(occupied).append(",\n");
+    sb.append("  piece=").append(piece).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  @Override
   public boolean equals(Object obj)
   {
     if (this == obj) {

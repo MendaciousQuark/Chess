@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.Objects;
+
 public class Move
 {
 
@@ -26,4 +29,47 @@ public class Move
     this.fen = board.toString();
   }
 
+  @Override
+  public String toString() {
+    return "Move{" +
+           "\n    start=" + Arrays.toString(start) +
+           "\n    end=" + Arrays.toString(end) +
+           "\n    piece=" + piece +
+           "\n    colour=" + colour +
+           "\n    turn=" + turn +
+           "\n    capture=" + capture +
+           "\n    check=" + check +
+           "\n    checkmate=" + checkmate +
+           "\n    draw=" + draw +
+           "\n    fen='" + fen + '\'' +
+           "\n}";
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Move otherMove = (Move) obj;
+    return sameAttributes(otherMove);
+
+    // Compare other fields that determine move equality
+    // For example: capturedPiece, isEnPassant, isPromotion, etc.
+  }
+
+  private boolean sameAttributes(Move otherMove)
+  {
+    return Arrays.equals(start, otherMove.start) &&
+           Arrays.equals(end, otherMove.end) &&
+           piece.equals(otherMove.piece) &&
+           colour == otherMove.colour &&
+           turn == otherMove.turn &&
+           capture == otherMove.capture &&
+           check == otherMove.check &&
+           checkmate == otherMove.checkmate &&
+           draw == otherMove.draw;
+  }
 }

@@ -6,10 +6,7 @@ public class Pawn extends Piece
     super(posX, posY, colour, value);
   }
 
-  private boolean enPassant()
-  {
-    return false;
-  }
+  private boolean enPassant;
 
   @Override
   public void findMoves(Board board, int turn, boolean check)
@@ -71,5 +68,15 @@ public class Pawn extends Piece
   {
     return (this.colour) ? "P":"p";
   }
-  
+
+  public boolean isEnPassant()
+  {
+    return enPassant;
+  }
+
+  public void setEnPassant(boolean enPassant)
+  {
+    this.enPassant = enPassant;
+  }
+
 }
