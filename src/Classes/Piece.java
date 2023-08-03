@@ -6,6 +6,7 @@ public abstract class Piece
   protected int posX, posY;
   protected boolean colour;
   protected int value;
+  protected boolean chained;
   protected ArrayList<Move> moves = new ArrayList<>();
 
   Piece(int posX, int posY, boolean colour, int value)

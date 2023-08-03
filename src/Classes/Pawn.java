@@ -12,8 +12,19 @@ public class Pawn extends Piece
   public void findMoves(Board board, int turn, boolean check)
   {
     moves.clear();
-    int nextRow = colour ? posX - 1 : posX + 1;
+    if(!chained)
+    {
+      // order of calls important for tests
+      findNonCaptureMoves(board, turn, check);
+      findCaptureMoves(board, turn, check);
+      findEnPassantMoves(board, turn, check);
+    }
 
+  }
+
+  public void findNonCaptureMoves(Board board, int turn, boolean check)
+  {
+    int nextRow = colour ? posX - 1 : posX + 1;
     // Check if the square in front of the pawn is empty
     if (board.isValidCoordinate(nextRow, posY) && !board.getSquare(nextRow, posY).occupied)
     {
@@ -36,6 +47,11 @@ public class Pawn extends Piece
         }
       }
     }
+  }
+
+  public void findCaptureMoves(Board board, int turn, boolean check)
+  {
+    int nextRow = colour ? posX - 1 : posX + 1;
 
     // Check if capturing diagonally is possible
     for (int colOffset : new int[]{-1, 1})
@@ -54,7 +70,10 @@ public class Pawn extends Piece
         }
       }
     }
+  }
 
+  public void findEnPassantMoves(Board board, int turn, boolean check)
+  {
     for(int colOffset : new int[]{-1, 1})
     {
       int nextCol = posY + colOffset;
@@ -75,13 +94,6 @@ public class Pawn extends Piece
         }
       }
     }
-    // Check for en passant moves
-    // Implement this logic to detect en passant moves and add them to the moves list
-    // ...
-
-    // Check for promotions
-    // Implement this logic to detect promotion moves and add them to the moves list
-    // ...
   }
 
   private boolean isFirstMove()
@@ -105,4 +117,8 @@ public class Pawn extends Piece
     this.enPassant = enPassant;
   }
 
+  public void setChained(boolean chained)
+  {
+    this.chained = chained;
+  }
 }
