@@ -26,14 +26,14 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the first move
-    int[] start = setStart(1, 3);
-    int[] end = setEnd(2, 3);
+    int[] start = pawn.setStart(1, 3);
+    int[] end =  pawn.setEnd(2, 3);
     // Create the expected move object for the first move
     Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
     // Set the start and end positions for the second move
-    start = setStart(1, 3);
-    end = setEnd(3, 3);
+    start =  pawn.setStart(1, 3);
+    end =  pawn.setEnd(3, 3);
     // Create the expected move object for the second move
     Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
@@ -49,14 +49,14 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the third move
-    start = setStart(6, 0);
-    end = setEnd(5, 0);
+    start =  pawn.setStart(6, 0);
+    end =  pawn.setEnd(5, 0);
     // Create the expected move object for the third move
     Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
     // Set the start and end positions for the fourth move
-    start = setStart(6, 0);
-    end = setEnd(4, 0);
+    start =  pawn.setStart(6, 0);
+    end =  pawn.setEnd(4, 0);
     // Create the expected move object for the fourth move
     Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
@@ -75,14 +75,14 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the fifth move
-    start = setStart(4, 3);
-    end = setEnd(3, 3);
+    start =  pawn.setStart(4, 3);
+    end =  pawn.setEnd(3, 3);
     // Create the expected move object for the fifth move
     Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
     // Set the start and end positions for the sixth move
-    start = setStart(4, 3);
-    end = setEnd(2, 3);
+    start =  pawn.setStart(4, 3);
+    end =  pawn.setEnd(2, 3);
     // Create the expected move object for the sixth move
     Move move6 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
@@ -98,14 +98,14 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the seventh move
-    start = setStart(3, 0);
-    end = setEnd(4, 0);
+    start =  pawn.setStart(3, 0);
+    end =  pawn.setEnd(4, 0);
     // Create the expected move object for the seventh move
     Move move7 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
     // Set the start and end positions for the eighth move
-    start = setStart(3, 0);
-    end = setEnd(5, 0);
+    start =  pawn.setStart(3, 0);
+    end =  pawn.setEnd(5, 0);
     // Create the expected move object for the eighth move
     Move move8 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
 
@@ -128,20 +128,20 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the first move
-    int[] start = setStart(4, 3);
-    int[] end = setEnd(3, 4);
+    int[] start =  pawn.setStart(4, 3);
+    int[] end =  pawn.setEnd(3, 4);
     // Create the expected move object for the first move
     Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Set the start and end positions for the second move
-    start = setStart(4, 3);
-    end = setEnd(3, 2);
+    start =  pawn.setStart(4, 3);
+    end =  pawn.setEnd(3, 2);
     // Create the expected move object for the second move
     Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Set the start and end positions for the third move
-    start = setStart(4, 3);
-    end = setEnd(3, 0);
+    start =  pawn.setStart(4, 3);
+    end =  pawn.setEnd(3, 0);
     // Create the expected move object for the third move
     Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
@@ -157,14 +157,14 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Set the start and end positions for the fourth move
-    start = setStart(3, 0);
-    end = setEnd(4, 1);
+    start =  pawn.setStart(3, 0);
+    end =  pawn.setEnd(4, 1);
     // Create the expected move object for the fourth move
     Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Set the start and end positions for the sixth move
-    start = setStart(3, 0);
-    end = setEnd(3, 2);
+    start =  pawn.setStart(3, 0);
+    end =  pawn.setEnd(3, 2);
     // Create the expected move object for the sixth move
     Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
@@ -196,12 +196,12 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Define the expected En passant moves for the pawn in this scenario
-    int[] start = setStart(3, 6);
-    int[] end = setEnd(2, 5);
+    int[] start =  pawn.setStart(3, 6);
+    int[] end =  pawn.setEnd(2, 5);
     Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
-    start = setStart(3, 6);
-    end = setEnd(2, 7);
+    start =  pawn.setStart(3, 6);
+    end =  pawn.setEnd(2, 7);
     Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant moves
@@ -226,12 +226,12 @@ public class PawnTests
     pawn.findMoves(board, turn, false);
 
     // Define the expected En passant move for the pawn in this scenario
-    start = setStart(4, 4);
-    end = setEnd(5, 5);
+    start =  pawn.setStart(4, 4);
+    end =  pawn.setEnd(5, 5);
     Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
-    start = setStart(4, 4);
-    end = setEnd(5, 3);
+    start =  pawn.setStart(4, 4);
+    end =  pawn.setEnd(5, 3);
     Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant move
@@ -247,24 +247,24 @@ public class PawnTests
     
   }
 
-  private int[] setStart(int i, int j) {
-    // Create a new integer array representing the start position
-    int[] start = new int[2];
-    // Set the row and column values for the start position
-    start[0] = i;
-    start[1] = j;
-    // Return the start position array
-    return start;
-  }
-
-  private int[] setEnd(int i, int j) {
-    // Create a new integer array representing the end position
-    int[] end = new int[2];
-    // Set the row and column values for the end position
-    end[0] = i;
-    end[1] = j;
-    // Return the end position array
-    return end;
-  }
+//  private int[] setStart(int i, int j) {
+//    // Create a new integer array representing the start position
+//    int[] start = new int[2];
+//    // Set the row and column values for the start position
+//    start[0] = i;
+//    start[1] = j;
+//    // Return the start position array
+//    return start;
+//  }
+//
+//  private int[] setEnd(int i, int j) {
+//    // Create a new integer array representing the end position
+//    int[] end = new int[2];
+//    // Set the row and column values for the end position
+//    end[0] = i;
+//    end[1] = j;
+//    // Return the end position array
+//    return end;
+//  }
 
 }
