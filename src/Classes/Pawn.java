@@ -1,9 +1,9 @@
 public class Pawn extends Piece
 {
 
-  Pawn(int posX, int posY, boolean colour, int value)
+  Pawn(int posI, int posJ, boolean colour, int value)
   {
-    super(posX, posY, colour, value);
+    super(posI, posJ, colour, value);
   }
 
   private boolean enPassant;
@@ -24,24 +24,24 @@ public class Pawn extends Piece
 
   public void findNonCapture(Board board, int turn, boolean check)
   {
-    int nextRow = colour ? posX - 1 : posX + 1;
+    int nextRow = colour ? posI - 1 : posI + 1;
     // Check if the square in front of the pawn is empty
-    if (board.isValidCoordinate(nextRow, posY) && !board.getSquare(nextRow, posY).occupied)
+    if (board.isValidCoordinate(nextRow, posJ) && !board.getSquare(nextRow, posJ).occupied)
     {
       // Add a regular move (no capture)
-      int[] start = {posX, posY};
-      int[] end = {nextRow, posY};
+      int[] start = {posI, posJ};
+      int[] end = {nextRow, posJ};
       Move move = new Move(board, start, end, this, colour, turn, false, check, false, false);
       moves.add(move);
 
       // Check if it's the first move for the pawn (two squares forward is possible)
       if (isFirstMove())
       {
-        int doubleNextRow = colour ? posX - 2 : posX + 2;
-        if (board.isValidCoordinate(doubleNextRow, posY) && !board.getSquare(doubleNextRow, posY).occupied)
+        int doubleNextRow = colour ? posI - 2 : posI + 2;
+        if (board.isValidCoordinate(doubleNextRow, posJ) && !board.getSquare(doubleNextRow, posJ).occupied)
         {
           // Add a double step move (no capture)
-          int[] doubleStepEnd = {doubleNextRow, posY};
+          int[] doubleStepEnd = {doubleNextRow, posJ};
           Move doubleStepMove = new Move(board, start, doubleStepEnd, this, colour, turn, false, check, false, false);
           moves.add(doubleStepMove);
         }
@@ -51,22 +51,18 @@ public class Pawn extends Piece
 
   public void findCapture(Board board, int turn, boolean check)
   {
-    int nextRow = colour ? posX - 1 : posX + 1;
+    int nextRow = colour ? posI - 1 : posI + 1;
 
     // Check if capturing diagonally is possible
     for (int colOffset : new int[]{-1, 1})
     {
-      int nextCol = posY + colOffset;
+      int nextCol = posJ + colOffset;
       if (board.isValidCoordinate(nextRow, nextCol))
       {
         Square targetSquare = board.getSquare(nextRow, nextCol);
         if (targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          // Add a capture move
-          int[] start = {posX, posY};
-          int[] end = {nextRow, nextCol};
-          Move captureMove = new Move(board, start, end, this, colour, turn, true, check, false, false);
-          moves.add(captureMove);
+          addCaptureMove(board, turn, check, nextRow, nextCol);
         }
       }
     }
@@ -76,18 +72,18 @@ public class Pawn extends Piece
   {
     for(int colOffset : new int[]{-1, 1})
     {
-      int nextCol = posY + colOffset;
-      if(board.isValidCoordinate(posX, nextCol))
+      int nextCol = posJ + colOffset;
+      if(board.isValidCoordinate(posI, nextCol))
       {
-        Square targetSquare = board.getSquare(posX, nextCol);
+        Square targetSquare = board.getSquare(posI, nextCol);
         if(targetSquare.occupied && targetSquare.piece.colour != colour &&
            targetSquare.piece instanceof Pawn targetPawn)
         {
           if(targetPawn.enPassant)
           {
-            int [] start = {posX, posY};
+            int [] start = {posI, posJ};
             int ColorModifier = colour? -1:+1;
-            int [] end = {posX + ColorModifier, nextCol};
+            int [] end = {posI + ColorModifier, nextCol};
             Move enPassantMove = new Move(board, start, end, this, colour, turn, true, check, false, false);
             moves.add(enPassantMove);
           }
@@ -98,7 +94,7 @@ public class Pawn extends Piece
 
   private boolean isFirstMove()
   {
-    return (this.colour && posX == 6) || (!this.colour && posX == 1);
+    return (this.colour && posI == 6) || (!this.colour && posI == 1);
   }
 
   @Override

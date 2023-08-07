@@ -1,8 +1,8 @@
 public class Rook extends Piece
 {
-  Rook(int posX, int posY, boolean colour, int value)
+  Rook(int posI, int posJ, boolean colour, int value)
   {
-    super(posX, posY, colour, value);
+    super(posI, posJ, colour, value);
   }
 
   @Override

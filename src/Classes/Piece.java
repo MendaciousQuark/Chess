@@ -3,16 +3,16 @@ import java.util.ArrayList;
 public abstract class Piece
 {
 
-  protected int posX, posY;
+  protected int posI, posJ;
   protected boolean colour;
   protected int value;
   protected boolean chained;
   protected ArrayList<Move> moves = new ArrayList<>();
 
-  Piece(int posX, int posY, boolean colour, int value)
+  Piece(int posI, int posJ, boolean colour, int value)
   {
-    this.posX = posX;
-    this.posY = posY;
+    this.posI = posI;
+    this.posJ = posJ;
     this.colour = colour;
     this.value = value;
   }
@@ -46,7 +46,7 @@ public abstract class Piece
 
   protected void addNonCaptureMove(Board board, int turn, boolean check, int destX, int destY)
   {
-    int [] start = setStart(posX, posY);
+    int [] start = setStart(posI, posJ);
     int [] end = setEnd(destX, destY);
     moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
 
@@ -54,7 +54,7 @@ public abstract class Piece
 
   protected void addCaptureMove(Board board, int turn, boolean check, int destX, int destY)
   {
-    int [] start = setStart(posX, posY);
+    int [] start = setStart(posI, posJ);
     int [] end = setEnd(destX, destY);
     moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
   }
@@ -84,11 +84,11 @@ public abstract class Piece
     int nextRow, nextCol;
     for(int rowOffset : new int[]{-1, 1})
     {
-      nextRow = posY + rowOffset;
+      nextRow = posJ + rowOffset;
       for(int i = 0; i < 2; i++)
       {
         int colOffset = i==0? -1 : 1;
-        nextCol = posX + colOffset;
+        nextCol = posI + colOffset;
         while(board.isValidCoordinate(nextRow, nextCol))
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
@@ -119,13 +119,13 @@ public abstract class Piece
   {
     for(int rowOffset : new int[]{-1, 1})
     {
-      int nextRow = posY + rowOffset;
-      while(board.isValidCoordinate(nextRow, posX))
+      int nextRow = posJ + rowOffset;
+      while(board.isValidCoordinate(nextRow, posI))
       {
-        Square targetSquare = board.getSquare(nextRow, posX);
+        Square targetSquare = board.getSquare(nextRow, posI);
         if(targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          addCaptureMove(board, turn, check, posX, nextRow);
+          addCaptureMove(board, turn, check, posI, nextRow);
           break;
         }
         //illegal move (capturing own piece)
@@ -136,7 +136,7 @@ public abstract class Piece
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, posX, nextRow);
+          addNonCaptureMove(board, turn, check, posI, nextRow);
         }
         nextRow += rowOffset;
       }
@@ -147,13 +147,13 @@ public abstract class Piece
   {
     for(int colOffset : new int[]{-1, 1})
     {
-      int nextCol = posX + colOffset;
-      while(board.isValidCoordinate(posY, nextCol))
+      int nextCol = posI + colOffset;
+      while(board.isValidCoordinate(posJ, nextCol))
       {
-        Square targetSquare = board.getSquare(posY, nextCol);
+        Square targetSquare = board.getSquare(posJ, nextCol);
         if(targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          addCaptureMove(board, turn, check, nextCol, posY);
+          addCaptureMove(board, turn, check, nextCol, posJ);
           break;
         }
         //illegal move (capturing own piece)
@@ -164,7 +164,7 @@ public abstract class Piece
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, nextCol, posY);
+          addNonCaptureMove(board, turn, check, nextCol, posJ);
         }
         nextCol += colOffset;
       }

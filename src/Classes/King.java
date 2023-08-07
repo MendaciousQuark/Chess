@@ -4,9 +4,9 @@ public class King extends Piece
   private final boolean moved;
   private boolean inCheck;
 
-  King(int posX, int posY, boolean colour, int value)
+  King(int posI, int posJ, boolean colour, int value)
   {
-    super(posX, posY, colour, value);
+    super(posI, posJ, colour, value);
     moved = false;
     inCheck = false;
   }

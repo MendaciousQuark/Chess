@@ -1,7 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import java.util.Arrays;
 
 public class PawnTests
 {
@@ -14,7 +13,7 @@ public class PawnTests
   }
 
   @Test
-  public void testMovement() {
+  public void testNonCapture() {
     int turn = 1;
     // Set up the board with a specific initial position
     board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
@@ -147,6 +146,7 @@ public class PawnTests
 
     // Assertions for the first pawn's moves
     Assertions.assertEquals(3, pawn.moves.size());
+
     Assertions.assertTrue(pawn.moves.contains(move1));
     Assertions.assertTrue(pawn.moves.contains(move2));
     Assertions.assertFalse(pawn.moves.contains(move3));
@@ -246,5 +246,6 @@ public class PawnTests
   {
     
   }
+
 
 }
