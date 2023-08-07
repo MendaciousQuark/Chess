@@ -247,24 +247,4 @@ public class PawnTests
     
   }
 
-//  private int[] setStart(int i, int j) {
-//    // Create a new integer array representing the start position
-//    int[] start = new int[2];
-//    // Set the row and column values for the start position
-//    start[0] = i;
-//    start[1] = j;
-//    // Return the start position array
-//    return start;
-//  }
-//
-//  private int[] setEnd(int i, int j) {
-//    // Create a new integer array representing the end position
-//    int[] end = new int[2];
-//    // Set the row and column values for the end position
-//    end[0] = i;
-//    end[1] = j;
-//    // Return the end position array
-//    return end;
-//  }
-
 }

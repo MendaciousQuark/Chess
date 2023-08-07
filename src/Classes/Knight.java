@@ -11,12 +11,12 @@ public class Knight extends Piece
   {
     if(!chained)
     {
-      findHorizontalMoves(board, turn, check);
-      findVerticalMoves(board, turn, check);
+      findHorizontal(board, turn, check);
+      findVertical(board, turn, check);
     }
   }
 
-  private void findHorizontalMoves(Board board, int turn, boolean check)
+  private void findHorizontal(Board board, int turn, boolean check)
   {
     int nextRow,nextCol;
     //horizontal
@@ -42,7 +42,7 @@ public class Knight extends Piece
     }
   }
 
-  private void findVerticalMoves(Board board, int turn, boolean check)
+  private void findVertical(Board board, int turn, boolean check)
   {
     int nextRow,nextCol;
     //horizontal
@@ -68,20 +68,7 @@ public class Knight extends Piece
     }
   }
 
-  private void addNonCaptureMove(Board board, int turn, boolean check, int destX, int destY)
-  {
-    int [] start = setStart(posX, posY);
-    int [] end = setEnd(destX, destY);
-    moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
 
-  }
-
-  private void addCaptureMove(Board board, int turn, boolean check, int destX, int destY)
-  {
-    int [] start = setStart(posX, posY);
-    int [] end = setEnd(destX, destY);
-    moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
-  }
   @Override
   protected String getName()
   {

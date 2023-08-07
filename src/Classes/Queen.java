@@ -9,8 +9,14 @@ public class Queen extends Piece
   @Override
   protected void findMoves(Board board, int turn, boolean check)
   {
-
+    if(!chained)
+    {
+      findDiagonalMoves(board, turn, check);
+      findVerticalMoves(board, turn, check);
+      findHorizontalMoves(board, turn, check);
+    }
   }
+
 
   @Override
   protected String getName()

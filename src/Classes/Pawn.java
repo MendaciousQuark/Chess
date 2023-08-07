@@ -15,14 +15,14 @@ public class Pawn extends Piece
     if(!chained)
     {
       // order of calls important for tests
-      findNonCaptureMoves(board, turn, check);
-      findCaptureMoves(board, turn, check);
-      findEnPassantMoves(board, turn, check);
+      findNonCapture(board, turn, check);
+      findCapture(board, turn, check);
+      findEnPassant(board, turn, check);
     }
 
   }
 
-  public void findNonCaptureMoves(Board board, int turn, boolean check)
+  public void findNonCapture(Board board, int turn, boolean check)
   {
     int nextRow = colour ? posX - 1 : posX + 1;
     // Check if the square in front of the pawn is empty
@@ -49,7 +49,7 @@ public class Pawn extends Piece
     }
   }
 
-  public void findCaptureMoves(Board board, int turn, boolean check)
+  public void findCapture(Board board, int turn, boolean check)
   {
     int nextRow = colour ? posX - 1 : posX + 1;
 
@@ -72,7 +72,7 @@ public class Pawn extends Piece
     }
   }
 
-  public void findEnPassantMoves(Board board, int turn, boolean check)
+  public void findEnPassant(Board board, int turn, boolean check)
   {
     for(int colOffset : new int[]{-1, 1})
     {

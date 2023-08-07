@@ -8,7 +8,7 @@ public class Bishop extends Piece
   @Override
   protected void findMoves(Board board, int turn, boolean check)
   {
-
+    findDiagonalMoves(board, turn, check);
   }
 
   @Override
