@@ -72,4 +72,54 @@ public class Move
            checkmate == otherMove.checkmate &&
            draw == otherMove.draw;
   }
+
+  public String getFen()
+  {
+    return fen;
+  }
+
+  public int[] getStart()
+  {
+    return start;
+  }
+
+  public int[] getEnd()
+  {
+    return end;
+  }
+
+  public Piece getPiece()
+  {
+    return piece;
+  }
+
+  public boolean isColour()
+  {
+    return colour;
+  }
+
+  public int getTurn()
+  {
+    return turn;
+  }
+
+  public boolean isCapture()
+  {
+    return capture;
+  }
+
+  public boolean isCheck()
+  {
+    return check;
+  }
+
+  public boolean isCheckmate()
+  {
+    return checkmate;
+  }
+
+  public boolean isDraw()
+  {
+    return draw;
+  }
 }

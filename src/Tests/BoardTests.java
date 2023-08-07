@@ -85,10 +85,10 @@ public class BoardTests
 
   @Test
   public void testDisplay() {
-    // Implement the test to verify if the Display method displays the board correctly
+    // Implement the test to verify if the display method displays the board correctly
     // Redirect the output to a string and compare it with the expected board representation
     board.setBoard("8/8/8/8/8/8/8/8");
-    String[] displayBoard = board.Display();
+    String[] displayBoard = board.display();
     String[] expectedOutput = {
         "  __h___g___f___e___d___c___b___a___\n",
         "  |****    ****    ****    ****    |\n",
@@ -150,7 +150,7 @@ public class BoardTests
         "  |_a___b___c___d___e___f___g___h__|\n"
     };
 
-    displayBoard = board.Display();
+    displayBoard = board.display();
     Assertions.assertArrayEquals(expectedOutput, displayBoard);
   }
 

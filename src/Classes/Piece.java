@@ -84,18 +84,17 @@ public abstract class Piece
     int nextRow, nextCol;
     for(int rowOffset : new int[]{-1, 1})
     {
-      nextRow = posJ + rowOffset;
-      for(int i = 0; i < 2; i++)
+      for(int colOffset : new int[] {-1, 1})
       {
-        int colOffset = i==0? -1 : 1;
-        nextCol = posI + colOffset;
+        nextRow = posI + rowOffset;
+        nextCol = posJ + colOffset;
         while(board.isValidCoordinate(nextRow, nextCol))
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
           //capturing piece
           if(targetSquare.occupied && targetSquare.piece.colour != colour)
           {
-            addCaptureMove(board, turn, check, nextCol, nextRow);
+            addCaptureMove(board, turn, check, nextRow, nextCol);
             break;
           }
           //illegal move (capturing own piece)
@@ -106,7 +105,7 @@ public abstract class Piece
           //non-capture move
           else
           {
-            addNonCaptureMove(board, turn, check, nextCol, nextRow);
+            addNonCaptureMove(board, turn, check, nextRow, nextCol);
           }
           nextCol += colOffset;
           nextRow += rowOffset;
@@ -119,13 +118,13 @@ public abstract class Piece
   {
     for(int rowOffset : new int[]{-1, 1})
     {
-      int nextRow = posJ + rowOffset;
-      while(board.isValidCoordinate(nextRow, posI))
+      int nextRow = posI + rowOffset;
+      while(board.isValidCoordinate(nextRow, posJ))
       {
-        Square targetSquare = board.getSquare(nextRow, posI);
+        Square targetSquare = board.getSquare(nextRow, posJ);
         if(targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          addCaptureMove(board, turn, check, posI, nextRow);
+          addCaptureMove(board, turn, check, nextRow, posJ);
           break;
         }
         //illegal move (capturing own piece)
@@ -136,7 +135,7 @@ public abstract class Piece
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, posI, nextRow);
+          addNonCaptureMove(board, turn, check, nextRow, posI);
         }
         nextRow += rowOffset;
       }
@@ -147,13 +146,13 @@ public abstract class Piece
   {
     for(int colOffset : new int[]{-1, 1})
     {
-      int nextCol = posI + colOffset;
-      while(board.isValidCoordinate(posJ, nextCol))
+      int nextCol = posJ + colOffset;
+      while(board.isValidCoordinate(posI, nextCol))
       {
-        Square targetSquare = board.getSquare(posJ, nextCol);
+        Square targetSquare = board.getSquare(posI, nextCol);
         if(targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          addCaptureMove(board, turn, check, nextCol, posJ);
+          addCaptureMove(board, turn, check, posI, nextCol);
           break;
         }
         //illegal move (capturing own piece)
@@ -164,7 +163,7 @@ public abstract class Piece
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, nextCol, posJ);
+          addNonCaptureMove(board, turn, check, posI, nextCol);
         }
         nextCol += colOffset;
       }

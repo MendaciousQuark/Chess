@@ -169,7 +169,7 @@ public class Board
     }
   }
 
-  public String[] Display()
+  public String[] display()
   {
     String[] displayBoard = new String[26];
 
