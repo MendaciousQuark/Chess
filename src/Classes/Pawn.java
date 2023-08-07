@@ -29,10 +29,7 @@ public class Pawn extends Piece
     if (board.isValidCoordinate(nextRow, posJ) && !board.getSquare(nextRow, posJ).occupied)
     {
       // Add a regular move (no capture)
-      int[] start = {posI, posJ};
-      int[] end = {nextRow, posJ};
-      Move move = new Move(board, start, end, this, colour, turn, false, check, false, false);
-      moves.add(move);
+      addNonCaptureMove(board, turn, check, nextRow, posJ);
 
       // Check if it's the first move for the pawn (two squares forward is possible)
       if (isFirstMove())
@@ -41,9 +38,7 @@ public class Pawn extends Piece
         if (board.isValidCoordinate(doubleNextRow, posJ) && !board.getSquare(doubleNextRow, posJ).occupied)
         {
           // Add a double step move (no capture)
-          int[] doubleStepEnd = {doubleNextRow, posJ};
-          Move doubleStepMove = new Move(board, start, doubleStepEnd, this, colour, turn, false, check, false, false);
-          moves.add(doubleStepMove);
+          addNonCaptureMove(board, turn, check, doubleNextRow, posJ);
         }
       }
     }
@@ -81,11 +76,8 @@ public class Pawn extends Piece
         {
           if(targetPawn.enPassant)
           {
-            int [] start = {posI, posJ};
             int ColorModifier = colour? -1:+1;
-            int [] end = {posI + ColorModifier, nextCol};
-            Move enPassantMove = new Move(board, start, end, this, colour, turn, true, check, false, false);
-            moves.add(enPassantMove);
+            addCaptureMove(board, turn, check, posI+ColorModifier, nextCol);
           }
         }
       }

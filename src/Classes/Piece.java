@@ -44,18 +44,18 @@ public abstract class Piece
            this.value == other.value;
   }
 
-  protected void addNonCaptureMove(Board board, int turn, boolean check, int destX, int destY)
+  protected void addNonCaptureMove(Board board, int turn, boolean check, int destI, int destJ)
   {
     int [] start = setStart(posI, posJ);
-    int [] end = setEnd(destX, destY);
-    moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
+    int [] end = setEnd(destI, destJ);
+    moves.add(new Move(board, start, end, this,  colour, turn, false, false, false, false));
 
   }
 
-  protected void addCaptureMove(Board board, int turn, boolean check, int destX, int destY)
+  protected void addCaptureMove(Board board, int turn, boolean check, int destI, int destJ)
   {
     int [] start = setStart(posI, posJ);
-    int [] end = setEnd(destX, destY);
+    int [] end = setEnd(destI, destJ);
     moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
   }
 

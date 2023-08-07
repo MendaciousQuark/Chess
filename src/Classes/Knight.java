@@ -32,11 +32,11 @@ public class Knight extends Piece
           Square targetSquare = board.getSquare(nextRow, nextCol);
           if(targetSquare.occupied && targetSquare.piece.colour != colour)
           {
-            addCaptureMove(board, turn, check, nextCol, nextRow);
+            addCaptureMove(board, turn, check, nextRow, nextCol);
           }
           else if (!targetSquare.occupied)
           {
-            addNonCaptureMove(board, turn, check, nextCol, nextRow);
+            addNonCaptureMove(board, turn, check, nextRow, nextCol);
           }
         }
       }
@@ -59,11 +59,11 @@ public class Knight extends Piece
           Square targetSquare = board.getSquare(nextRow, nextCol);
           if(targetSquare.occupied && targetSquare.piece.colour != colour)
           {
-            addCaptureMove(board, turn, check, nextCol, nextRow);
+            addCaptureMove(board, turn, check, nextRow, nextCol);
           }
           else if (!targetSquare.occupied)
           {
-            addNonCaptureMove(board, turn, check, nextCol, nextRow);
+            addNonCaptureMove(board, turn, check, nextRow, nextCol);
           }
         }
       }
