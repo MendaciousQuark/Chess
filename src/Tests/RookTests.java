@@ -88,18 +88,16 @@ public class RookTests
     Move falseMove1 = new Move(board, start, end, rook, rook.colour, turn, true, false, false, false);
 
     Assertions.assertEquals(6, rook.moves.size());
-    for(Move move: rook.moves)
-    {
-      if(move.getEnd()[1] == trueMove1.getEnd()[1])
-      {
-        System.out.println(move);
-      }
-    }
-    System.out.println(trueMove1);
     Assertions.assertTrue(rook.moves.contains(trueMove1));
     Assertions.assertTrue(rook.moves.contains(trueMove2));
     Assertions.assertTrue(rook.moves.contains(trueMove3));
     Assertions.assertFalse(rook.moves.contains(falseMove1));
+  }
+
+  @Test
+  public void testChained()
+  {
+
   }
 
 }

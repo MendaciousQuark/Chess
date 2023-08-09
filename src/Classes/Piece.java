@@ -135,7 +135,7 @@ public abstract class Piece
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, nextRow, posI);
+          addNonCaptureMove(board, turn, check, nextRow, posJ);
         }
         nextRow += rowOffset;
       }
