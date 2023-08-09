@@ -26,49 +26,49 @@ public class QueenTests
     int[] start = queen.setStart(3, 3);
     int[] end =  queen.setEnd(2, 2);
     // Create the expected move object for the first move
-    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the second move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(4, 2);
     // Create the expected move object for the second move
-    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the third move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(4, 4);
     // Create the expected move object for the third move
-    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the fourth move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(2, 4);
     // Create the expected move object for the fourth move
-    Move trueMove4 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove4 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the fifth move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(5, 1);
     // Create the expected move object for the fifth move
-    Move trueMove5 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove5 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the sixth move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(5, 5);
     // Create the expected move object for the sixth move
-    Move trueMove6 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove6 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the first illegal move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(6, 0);
     // Create the expected move object for the first illegal move
-    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the second illegal move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(6, 6);
     // Create the expected move object for the second illegal move
-    Move falseMove2 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move falseMove2 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     Assertions.assertEquals(19, queen.moves.size());
     Assertions.assertTrue(queen.moves.contains(trueMove1));
@@ -95,25 +95,25 @@ public class QueenTests
     int[] start = queen.setStart(2, 3);
     int[] end =  queen.setEnd(1, 3);
     // Create the expected move object for the first move
-    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the second move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(2, 2);
     // Create the expected move object for the second move
-    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the third move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(2, 4);
     // Create the expected move object for the third move
-    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     // Set the start and end positions for the first illegal move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(3, 3);
     // Create the expected move object for the first illegal move
-    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, false, false, false, false);
+    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, false, check, false, false);
 
     Assertions.assertEquals(15, queen.moves.size());
     Assertions.assertTrue(queen.moves.contains(trueMove1));
@@ -136,43 +136,43 @@ public class QueenTests
     int[] start = queen.setStart(2, 3);
     int[] end =  queen.setEnd(0, 3);
     // Create the expected move object for the first move
-    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move trueMove1 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the second move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(1, 2);
     // Create the expected move object for the second move
-    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move trueMove2 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the third move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(1, 4);
     // Create the expected move object for the third move
-    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move trueMove3 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the fourth move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(2, 1);
     // Create the expected move object for the fourth move
-    Move trueMove4 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move trueMove4 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the fifth move
     start = queen.setStart(2, 3);
     end =  queen.setEnd(2, 5);
     // Create the expected move object for the fifth move
-    Move trueMove5 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move trueMove5 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the first illegal move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(0, 1);
     // Create the expected move object for the first illegal move
-    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move falseMove1 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     // Set the start and end positions for the second illegal move
     start = queen.setStart(3, 3);
     end =  queen.setEnd(2, 6);
     // Create the expected move object for the second illegal move
-    Move falseMove2 = new Move(board, start, end, queen, queen.colour, turn, true, false, false, false);
+    Move falseMove2 = new Move(board, start, end, queen, queen.colour, turn, true, check, false, false);
 
     Assertions.assertEquals(15, queen.moves.size());
     Assertions.assertTrue(queen.moves.contains(trueMove1));

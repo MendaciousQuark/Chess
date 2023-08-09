@@ -17,6 +17,7 @@ public class King extends Piece
 
   }
 
+
   @Override
   protected String getName()
   {
