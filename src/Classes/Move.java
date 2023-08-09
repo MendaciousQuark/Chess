@@ -4,19 +4,21 @@ import java.util.Objects;
 public class Move
 {
 
-  private String fen;
-  private int[] start;
-  private int[] end;
-  private Piece piece;
-  private boolean colour;
-  private int turn;
-  private boolean capture;
-  private boolean check;
-  private boolean checkmate;
-  private boolean draw;
+  private final String fen;
+  private final int[] start;
+  private final int[] end;
+  private final Piece piece;
+  private final boolean colour;
+  private final int turn;
+  private final boolean capture;
+  private final boolean check;
+  private final boolean checkmate;
+  private final boolean draw;
+  private final boolean castle;
 
   public Move(Board board, int[] start, int[] end, Piece piece, boolean colour, int turn, boolean capture, boolean check, boolean checkmate, boolean draw)
   {
+    this.fen = board.toString();
     this.start = start;
     this.end = end;
     this.piece = piece;
@@ -26,7 +28,22 @@ public class Move
     this.check = check;
     this.checkmate = checkmate;
     this.draw = draw;
+    this.castle = false;
+  }
+
+  public Move(Board board, int[] start, int[] end, Piece piece, boolean castle, int turn, boolean checkmate, boolean draw, boolean check)
+  {
     this.fen = board.toString();
+    this.start = start;
+    this.end = end;
+    this.piece = piece;
+    this.colour = piece.colour;
+    this.turn = turn;
+    this.capture = false;
+    this.check = check;
+    this.checkmate = checkmate;
+    this.draw = draw;
+    this.castle = castle;
   }
 
   @Override
@@ -121,5 +138,10 @@ public class Move
   public boolean isDraw()
   {
     return draw;
+  }
+
+  public boolean isCastle()
+  {
+    return castle;
   }
 }
