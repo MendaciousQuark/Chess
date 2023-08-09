@@ -92,20 +92,19 @@ public abstract class Piece
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
           //capturing piece
-          if(targetSquare.occupied && targetSquare.piece.colour != colour)
+          if(targetSquare.isOccupiedByOpponent(this.colour))
           {
             addCaptureMove(board, turn, check, nextRow, nextCol);
             break;
           }
-          //illegal move (capturing own piece)
-          else if(targetSquare.occupied)
+          else if(!targetSquare.occupied)
           {
-            break;
+            addNonCaptureMove(board, turn, check, nextRow, nextCol);
           }
           //non-capture move
           else
           {
-            addNonCaptureMove(board, turn, check, nextRow, nextCol);
+            break;
           }
           nextCol += colOffset;
           nextRow += rowOffset;
@@ -122,20 +121,18 @@ public abstract class Piece
       while(board.isValidCoordinate(nextRow, posJ))
       {
         Square targetSquare = board.getSquare(nextRow, posJ);
-        if(targetSquare.occupied && targetSquare.piece.colour != colour)
+        if(targetSquare.isOccupiedByOpponent(this.colour))
         {
           addCaptureMove(board, turn, check, nextRow, posJ);
           break;
         }
-        //illegal move (capturing own piece)
-        else if(targetSquare.occupied)
-        {
-          break;
-        }
-        //non-capture move
-        else
+        else if(!targetSquare.occupied)
         {
           addNonCaptureMove(board, turn, check, nextRow, posJ);
+        }
+        else
+        {
+          break;
         }
         nextRow += rowOffset;
       }
@@ -150,20 +147,19 @@ public abstract class Piece
       while(board.isValidCoordinate(posI, nextCol))
       {
         Square targetSquare = board.getSquare(posI, nextCol);
-        if(targetSquare.occupied && targetSquare.piece.colour != colour)
+        if(targetSquare.isOccupiedByOpponent(this.colour))
         {
           addCaptureMove(board, turn, check, posI, nextCol);
           break;
         }
-        //illegal move (capturing own piece)
-        else if(targetSquare.occupied)
+        else if(!targetSquare.occupied)
         {
-          break;
+          addNonCaptureMove(board, turn, check, posI, nextCol);
         }
         //non-capture move
         else
         {
-          addNonCaptureMove(board, turn, check, posI, nextCol);
+          break;
         }
         nextCol += colOffset;
       }

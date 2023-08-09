@@ -18,6 +18,26 @@ public class King extends Piece
   }
 
   @Override
+  protected void findDiagonalMoves(Board board, int turn, boolean check)
+  {
+
+  }
+
+  @Override
+  protected void findVerticalMoves(Board board, int turn, boolean check)
+  {
+
+  }
+
+  @Override
+  protected void findHorizontalMoves(Board board, int turn, boolean check)
+  {
+
+  }
+
+
+
+  @Override
   protected String getName()
   {
     return (this.colour) ? "K":"k";

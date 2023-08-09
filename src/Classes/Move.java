@@ -63,7 +63,8 @@ public class Move
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(Object obj)
+  {
     if (this == obj) {
       return true;
     }
@@ -73,8 +74,6 @@ public class Move
     Move otherMove = (Move) obj;
     return sameAttributes(otherMove);
 
-    // Compare other fields that determine move equality
-    // For example: capturedPiece, isEnPassant, isPromotion, etc.
   }
 
   private boolean sameAttributes(Move otherMove)
@@ -88,6 +87,11 @@ public class Move
            check == otherMove.check &&
            checkmate == otherMove.checkmate &&
            draw == otherMove.draw;
+  }
+
+  public boolean sameDestination(Move otherMove)
+  {
+    return this.end[0] == otherMove.end[0] && this.end[1] == otherMove.end[1];
   }
 
   public String getFen()

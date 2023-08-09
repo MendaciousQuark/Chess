@@ -30,7 +30,7 @@ public class Square
 
   public boolean isOccupiedByOpponent(boolean colour)
   {
-    return this.occupied && this.colour;
+    return this.occupied && (piece.colour != colour);
   }
 
   @Override

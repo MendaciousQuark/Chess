@@ -30,7 +30,7 @@ public class Knight extends Piece
         if(board.isValidCoordinate(nextRow, nextCol))
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
-          if(targetSquare.occupied && targetSquare.piece.colour != colour)
+          if(targetSquare.isOccupiedByOpponent(this.colour))
           {
             addCaptureMove(board, turn, check, nextRow, nextCol);
           }
@@ -57,7 +57,7 @@ public class Knight extends Piece
         if(board.isValidCoordinate(nextRow, nextCol))
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
-          if(targetSquare.occupied && targetSquare.piece.colour != colour)
+          if(targetSquare.isOccupiedByOpponent(this.colour))
           {
             addCaptureMove(board, turn, check, nextRow, nextCol);
           }
