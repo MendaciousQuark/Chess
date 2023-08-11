@@ -6,9 +6,9 @@ public class Bishop extends Piece
   }
 
   @Override
-  protected void findMoves(Board board, int turn, boolean check)
+  protected void findMoves(Board board, int turn)
   {
-    findDiagonalMoves(board, turn, check);
+    findDiagonalMoves(board, turn);
   }
 
   @Override

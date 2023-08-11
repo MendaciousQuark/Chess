@@ -7,17 +7,17 @@ public class Knight extends Piece
   }
 
   @Override
-  protected void findMoves(Board board, int turn, boolean check)
+  protected void findMoves(Board board, int turn)
   {
     if(!chained)
     {
-      findHorizontalMoves(board, turn, check);
-      findVerticalMoves(board, turn, check);
+      findHorizontalMoves(board, turn);
+      findVerticalMoves(board, turn);
     }
   }
 
   @Override
-  protected void findHorizontalMoves(Board board, int turn, boolean check)
+  protected void findHorizontalMoves(Board board, int turn)
   {
     int nextRow,nextCol;
     //horizontal
@@ -32,11 +32,11 @@ public class Knight extends Piece
           Square targetSquare = board.getSquare(nextRow, nextCol);
           if(targetSquare.isOccupiedByOpponent(this.colour))
           {
-            addCaptureMove(board, turn, check, nextRow, nextCol);
+            addCaptureMove(board, turn, nextRow, nextCol);
           }
           else if (!targetSquare.occupied)
           {
-            addNonCaptureMove(board, turn, check, nextRow, nextCol);
+            addNonCaptureMove(board, turn, nextRow, nextCol);
           }
         }
       }
@@ -44,7 +44,7 @@ public class Knight extends Piece
   }
 
   @Override
-  protected void findVerticalMoves(Board board, int turn, boolean check)
+  protected void findVerticalMoves(Board board, int turn)
   {
     int nextRow,nextCol;
     //horizontal
@@ -59,11 +59,11 @@ public class Knight extends Piece
           Square targetSquare = board.getSquare(nextRow, nextCol);
           if(targetSquare.isOccupiedByOpponent(this.colour))
           {
-            addCaptureMove(board, turn, check, nextRow, nextCol);
+            addCaptureMove(board, turn, nextRow, nextCol);
           }
           else if (!targetSquare.occupied)
           {
-            addNonCaptureMove(board, turn, check, nextRow, nextCol);
+            addNonCaptureMove(board, turn, nextRow, nextCol);
           }
         }
       }

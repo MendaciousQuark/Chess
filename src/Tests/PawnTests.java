@@ -22,19 +22,19 @@ public class PawnTests
     Pawn pawn = (Pawn) board.getSquare(1, 3).piece;
 
     // Find possible moves for the pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the first move
     int[] start = pawn.setStart(1, 3);
     int[] end =  pawn.setEnd(2, 3);
     // Create the expected move object for the first move
-    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Set the start and end positions for the second move
     start =  pawn.setStart(1, 3);
     end =  pawn.setEnd(3, 3);
     // Create the expected move object for the second move
-    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Assertions for the first pawn's moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -45,19 +45,19 @@ public class PawnTests
     pawn = (Pawn) board.getSquare(6, 0).piece;
 
     // Find possible moves for the second pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the third move
     start =  pawn.setStart(6, 0);
     end =  pawn.setEnd(5, 0);
     // Create the expected move object for the third move
-    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Set the start and end positions for the fourth move
     start =  pawn.setStart(6, 0);
     end =  pawn.setEnd(4, 0);
     // Create the expected move object for the fourth move
-    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Assertions for the second pawn's moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -71,19 +71,19 @@ public class PawnTests
     pawn = (Pawn) board.getSquare(4, 3).piece;
 
     // Find possible moves for the third pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the fifth move
     start =  pawn.setStart(4, 3);
     end =  pawn.setEnd(3, 3);
     // Create the expected move object for the fifth move
-    Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Set the start and end positions for the sixth move
     start =  pawn.setStart(4, 3);
     end =  pawn.setEnd(2, 3);
     // Create the expected move object for the sixth move
-    Move move6 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move6 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Assertions for the third pawn's moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -94,19 +94,19 @@ public class PawnTests
     pawn = (Pawn) board.getSquare(3, 0).piece;
 
     // Find possible moves for the fourth pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the seventh move
     start =  pawn.setStart(3, 0);
     end =  pawn.setEnd(4, 0);
     // Create the expected move object for the seventh move
-    Move move7 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move7 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Set the start and end positions for the eighth move
     start =  pawn.setStart(3, 0);
     end =  pawn.setEnd(5, 0);
     // Create the expected move object for the eighth move
-    Move move8 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false, false);
+    Move move8 = new Move(board, start, end, pawn, pawn.colour, turn, false, false, false);
 
     // Assertions for the fourth pawn's moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -124,25 +124,25 @@ public class PawnTests
     // Get the specific pawn from the board (row 4, column 3)
     Pawn pawn = (Pawn) board.getSquare(4, 3).piece;
     // Find possible moves for the pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the first move
     int[] start =  pawn.setStart(4, 3);
     int[] end =  pawn.setEnd(3, 4);
     // Create the expected move object for the first move
-    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Set the start and end positions for the second move
     start =  pawn.setStart(4, 3);
     end =  pawn.setEnd(3, 2);
     // Create the expected move object for the second move
-    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Set the start and end positions for the third move
     start =  pawn.setStart(4, 3);
     end =  pawn.setEnd(3, 0);
     // Create the expected move object for the third move
-    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Assertions for the first pawn's moves
     Assertions.assertEquals(3, pawn.moves.size());
@@ -154,19 +154,19 @@ public class PawnTests
     // Get another pawn from the board (row 3, column 0)
     pawn = (Pawn) board.getSquare(3, 0).piece;
     // Find possible moves for the second pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Set the start and end positions for the fourth move
     start =  pawn.setStart(3, 0);
     end =  pawn.setEnd(4, 1);
     // Create the expected move object for the fourth move
-    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Set the start and end positions for the sixth move
     start =  pawn.setStart(3, 0);
     end =  pawn.setEnd(3, 2);
     // Create the expected move object for the sixth move
-    Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move5 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Assertions for the second pawn's moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -193,16 +193,16 @@ public class PawnTests
     board.getSquare(3, 5).piece = enPassantPawn;
 
     // Calculate available moves for the pawn
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Define the expected En passant moves for the pawn in this scenario
     int[] start =  pawn.setStart(3, 6);
     int[] end =  pawn.setEnd(2, 5);
-    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move1 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     start =  pawn.setStart(3, 6);
     end =  pawn.setEnd(2, 7);
-    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move2 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant moves
     Assertions.assertEquals(2, pawn.moves.size());
@@ -223,16 +223,16 @@ public class PawnTests
     board.getSquare(4, 5).piece = enPassantPawn;
 
     // Calculate available moves for the pawn in this scenario
-    pawn.findMoves(board, turn, false);
+    pawn.findMoves(board, turn);
 
     // Define the expected En passant move for the pawn in this scenario
     start =  pawn.setStart(4, 4);
     end =  pawn.setEnd(5, 5);
-    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move3 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     start =  pawn.setStart(4, 4);
     end =  pawn.setEnd(5, 3);
-    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false, false);
+    Move move4 = new Move(board, start, end, pawn, pawn.colour, turn, true, false, false);
 
     // Check that the pawn's available moves list contains the expected En passant move
     Assertions.assertEquals(2, pawn.moves.size());

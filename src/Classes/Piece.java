@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class Piece
 {
@@ -22,8 +23,6 @@ public abstract class Piece
     return "Piece";
   }
 
-  protected abstract void findMoves(Board board, int turn, boolean check);
-
   @Override
   public boolean equals(Object obj)
   {
@@ -44,19 +43,19 @@ public abstract class Piece
            this.value == other.value;
   }
 
-  protected void addNonCaptureMove(Board board, int turn, boolean check, int destI, int destJ)
+  protected void addNonCaptureMove(Board board, int turn, int destI, int destJ)
   {
     int [] start = setStart(posI, posJ);
     int [] end = setEnd(destI, destJ);
-    moves.add(new Move(board, start, end, this,  colour, turn, false, false, false, false));
+    moves.add(new Move(board, start, end, this,  colour, turn, false, false, false));
 
   }
 
-  protected void addCaptureMove(Board board, int turn, boolean check, int destI, int destJ)
+  protected void addCaptureMove(Board board, int turn, int destI, int destJ)
   {
     int [] start = setStart(posI, posJ);
     int [] end = setEnd(destI, destJ);
-    moves.add(new Move(board, start, end, this,  colour, turn, true, false, false, false));
+    moves.add(new Move(board, start, end, this,  colour, turn, true, false, false));
   }
 
   protected int[] setStart(int i, int j) {
@@ -79,7 +78,9 @@ public abstract class Piece
     return end;
   }
 
-  protected void findDiagonalMoves(Board board, int turn, boolean check)
+  protected abstract void findMoves(Board board, int turn);
+
+  protected void findDiagonalMoves(Board board, int turn)
   {
     int nextRow, nextCol;
     for(int rowOffset : new int[]{-1, 1})
@@ -94,12 +95,12 @@ public abstract class Piece
           //capturing piece
           if(targetSquare.isOccupiedByOpponent(this.colour))
           {
-            addCaptureMove(board, turn, check, nextRow, nextCol);
+            addCaptureMove(board, turn, nextRow, nextCol);
             break;
           }
           else if(!targetSquare.occupied)
           {
-            addNonCaptureMove(board, turn, check, nextRow, nextCol);
+            addNonCaptureMove(board, turn, nextRow, nextCol);
           }
           //non-capture move
           else
@@ -113,7 +114,7 @@ public abstract class Piece
     }
   }
 
-  protected void findVerticalMoves(Board board, int turn, boolean check)
+  protected void findVerticalMoves(Board board, int turn)
   {
     for(int rowOffset : new int[]{-1, 1})
     {
@@ -123,12 +124,12 @@ public abstract class Piece
         Square targetSquare = board.getSquare(nextRow, posJ);
         if(targetSquare.isOccupiedByOpponent(this.colour))
         {
-          addCaptureMove(board, turn, check, nextRow, posJ);
+          addCaptureMove(board, turn, nextRow, posJ);
           break;
         }
         else if(!targetSquare.occupied)
         {
-          addNonCaptureMove(board, turn, check, nextRow, posJ);
+          addNonCaptureMove(board, turn, nextRow, posJ);
         }
         else
         {
@@ -139,7 +140,7 @@ public abstract class Piece
     }
   }
 
-  protected void findHorizontalMoves(Board board, int turn, boolean check)
+  protected void findHorizontalMoves(Board board, int turn)
   {
     for(int colOffset : new int[]{-1, 1})
     {
@@ -149,14 +150,13 @@ public abstract class Piece
         Square targetSquare = board.getSquare(posI, nextCol);
         if(targetSquare.isOccupiedByOpponent(this.colour))
         {
-          addCaptureMove(board, turn, check, posI, nextCol);
+          addCaptureMove(board, turn, posI, nextCol);
           break;
         }
         else if(!targetSquare.occupied)
         {
-          addNonCaptureMove(board, turn, check, posI, nextCol);
+          addNonCaptureMove(board, turn, posI, nextCol);
         }
-        //non-capture move
         else
         {
           break;
@@ -165,5 +165,25 @@ public abstract class Piece
       }
     }
   }
-  
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Type: ").append(getName()).append("\n");
+    sb.append("Position: ").append(posI).append(", ").append(posJ).append("\n");
+    sb.append("Colour: ").append(colour ? "White" : "Black").append("\n");
+    sb.append("Value: ").append(value).append("\n");
+    sb.append("Chained: ").append(chained).append("\n");
+
+    sb.append("Moves: [\n");
+    for (Move move : moves) {
+      sb.append("  Start: ").append(Arrays.toString(move.getStart())).append(", ");
+      sb.append("End: ").append(Arrays.toString(move.getEnd())).append("\n");
+    }
+    sb.append("]\n");
+
+    return sb.toString();
+  }
+
+
 }

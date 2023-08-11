@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class Board
 {
 
   private Square[][] board = new Square[8][8];
+  private ArrayList<Move> whiteMoves = new ArrayList<>();
+  private ArrayList<Move> blackMoves = new ArrayList<>();
 
   public  Board()
   {
@@ -117,18 +121,24 @@ public class Board
     String boardPart = fenParts[0];
 
     int i = 0, j = 0;
-    for (char c : boardPart.toCharArray()) {
-      if (c == '/') {
+    for (char c : boardPart.toCharArray())
+    {
+      if (c == '/')
+      {
         i++;
         j = 0;
-      } else if (Character.isDigit(c)) {
+      }
+      else if (Character.isDigit(c))
+      {
         int emptySquares = Character.getNumericValue(c);
-        for (int k = 0; k < emptySquares; k++) {
+        for (int k = 0; k < emptySquares; k++)
+        {
           board[i][j].occupied = false;
           board[i][j].piece = null;
           j++;
         }
-      } else
+      }
+      else
       {
         boolean isUpperCase = Character.isUpperCase(c);
         char pieceCode = Character.toLowerCase(c);
@@ -245,6 +255,29 @@ public class Board
     return row >= 0 && row < 8 && col >= 0 && col < 8;
   }
 
+  public void findMoves(int turn)
+  {
+    for(Square [] row: board)
+    {
+      for(Square square: row)
+      {
+        if(square.occupied)
+        {
+
+            square.piece.findMoves(new Board(this.toString()), turn);
+            if(square.piece.colour)
+            {
+              whiteMoves.addAll(square.piece.moves);
+            }
+            else
+            {
+              blackMoves.addAll((square.piece.moves));
+            }
+        }
+      }
+    }
+  }
+
   public double evaluate()
   {
     return 0.0;
@@ -258,6 +291,52 @@ public class Board
   public Square getSquare(int row, int col)
   {
     return board[row][col];
+  }
+
+  public boolean isSquareAttacked(boolean colour, int destI, int destJ, int turn)
+  {
+      int [] destination = {destI, destJ};
+      ArrayList<Move> movesToCheck = (colour)? blackMoves:whiteMoves;
+      for(Move move: movesToCheck)
+      {
+        if(move.sameDestination(destination))
+        {
+          if(move.getPiece() instanceof Pawn)
+          {
+            if(move.isCapture())
+            {
+              return true;
+            }
+          }
+          else
+          {
+            return true;
+          }
+        }
+      }
+      return hasDiagonallyAdjacentOpposingPawn(colour, destI, destJ);
+  }
+
+  private boolean hasDiagonallyAdjacentOpposingPawn(boolean colour, int posI, int posJ)
+  {
+    int rowOffset = (colour)? -1:1;
+    for(int colOffset: new int[]{-1,1})
+    {
+      int row = posI + rowOffset;
+      int col = posJ + colOffset;
+      if(isValidCoordinate(row, col))
+      {
+        Square targetSquare = getSquare(row, col);
+        if(targetSquare.isOccupiedByOpponent(colour))
+        {
+          if(targetSquare.piece instanceof Pawn)
+          {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
   public void setBoard(String fen)

@@ -12,30 +12,94 @@ public class King extends Piece
   }
 
   @Override
-  protected void findMoves(Board board, int turn, boolean check)
+  protected void findMoves(Board board, int turn)
   {
-
+    findDiagonalMoves(board, turn);
+    findVerticalMoves(board, turn);
+    findHorizontalMoves(board, turn);
   }
 
   @Override
-  protected void findDiagonalMoves(Board board, int turn, boolean check)
+  protected void findDiagonalMoves(Board board, int turn)
   {
-
+    for(int rowOffset: new int[] {-1,1})
+    {
+      for(int colOffset: new int[] {-1,1})
+      {
+        int nextRow = posI + rowOffset;
+        int nextCol = posJ + colOffset;
+        if(board.isValidCoordinate(nextRow, nextCol))
+        {
+          Square targetSquare = board.getSquare(nextRow, nextCol);
+          if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+          {
+            if(targetSquare.isOccupiedByOpponent(this.colour))
+            {
+              addCaptureMove(board, turn, nextRow, nextCol);
+            }
+            else if(!targetSquare.occupied)
+            {
+              addNonCaptureMove(board, turn, nextRow, nextCol);
+            }
+            else
+            {
+              break;
+            }
+          }
+        }
+      }
+    }
   }
 
   @Override
-  protected void findVerticalMoves(Board board, int turn, boolean check)
+  protected void findVerticalMoves(Board board, int turn)
   {
-
+    for(int rowOffset: new int[] {-1,1})
+    {
+      int nextRow = posI + rowOffset;
+      int nextCol = posJ;
+      if(board.isValidCoordinate(nextRow, nextCol))
+      {
+        Square targetSquare = board.getSquare(nextRow, nextCol);
+        if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+        {
+          if(targetSquare.isOccupiedByOpponent(this.colour))
+          {
+            addCaptureMove(board, turn, nextRow, nextCol);
+          }
+          else if(!targetSquare.occupied)
+          {
+            addNonCaptureMove(board, turn, nextRow, nextCol);
+          }
+        }
+      }
+    }
   }
 
   @Override
-  protected void findHorizontalMoves(Board board, int turn, boolean check)
+  protected void findHorizontalMoves(Board board, int turn)
   {
-
+    for(int colOffset: new int[] {-1,1})
+    {
+      int nextRow = posI;
+      int nextCol = posJ + colOffset;
+      if(board.isValidCoordinate(nextRow, nextCol))
+      {
+        Square targetSquare = board.getSquare(nextRow, nextCol);
+        if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+        {
+          if(targetSquare.isOccupiedByOpponent(this.colour))
+          {
+            addCaptureMove(board, turn, nextRow, nextCol);
+          }
+          else if(!targetSquare.occupied)
+          {
+            addNonCaptureMove(board, turn, nextRow, nextCol);
+          }
+        }
+      }
+    }
   }
-
-
 
   @Override
   protected String getName()

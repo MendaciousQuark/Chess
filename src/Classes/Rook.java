@@ -6,12 +6,12 @@ public class Rook extends Piece
   }
 
   @Override
-  protected void findMoves(Board board, int turn, boolean check)
+  protected void findMoves(Board board, int turn)
   {
     if(!chained)
     {
-      findVerticalMoves(board, turn, check);
-      findHorizontalMoves(board, turn, check);
+      findVerticalMoves(board, turn);
+      findHorizontalMoves(board, turn);
     }
   }
 

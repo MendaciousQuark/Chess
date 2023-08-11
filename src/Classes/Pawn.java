@@ -9,27 +9,27 @@ public class Pawn extends Piece
   private boolean enPassant;
 
   @Override
-  public void findMoves(Board board, int turn, boolean check)
+  public void findMoves(Board board, int turn)
   {
     moves.clear();
     if(!chained)
     {
       // order of calls important for tests
-      findNonCapture(board, turn, check);
-      findCapture(board, turn, check);
-      findEnPassant(board, turn, check);
+      findNonCapture(board, turn);
+      findCapture(board, turn);
+      findEnPassant(board, turn);
     }
 
   }
 
-  public void findNonCapture(Board board, int turn, boolean check)
+  public void findNonCapture(Board board, int turn)
   {
     int nextRow = colour ? posI - 1 : posI + 1;
     // Check if the square in front of the pawn is empty
     if (board.isValidCoordinate(nextRow, posJ) && !board.getSquare(nextRow, posJ).occupied)
     {
       // Add a regular move (no capture)
-      addNonCaptureMove(board, turn, check, nextRow, posJ);
+      addNonCaptureMove(board, turn, nextRow, posJ);
 
       // Check if it's the first move for the pawn (two squares forward is possible)
       if (isFirstMove())
@@ -38,13 +38,13 @@ public class Pawn extends Piece
         if (board.isValidCoordinate(doubleNextRow, posJ) && !board.getSquare(doubleNextRow, posJ).occupied)
         {
           // Add a double step move (no capture)
-          addNonCaptureMove(board, turn, check, doubleNextRow, posJ);
+          addNonCaptureMove(board, turn, doubleNextRow, posJ);
         }
       }
     }
   }
 
-  public void findCapture(Board board, int turn, boolean check)
+  public void findCapture(Board board, int turn)
   {
     int nextRow = colour ? posI - 1 : posI + 1;
 
@@ -57,13 +57,13 @@ public class Pawn extends Piece
         Square targetSquare = board.getSquare(nextRow, nextCol);
         if (targetSquare.occupied && targetSquare.piece.colour != colour)
         {
-          addCaptureMove(board, turn, check, nextRow, nextCol);
+          addCaptureMove(board, turn, nextRow, nextCol);
         }
       }
     }
   }
 
-  public void findEnPassant(Board board, int turn, boolean check)
+  public void findEnPassant(Board board, int turn)
   {
     for(int colOffset : new int[]{-1, 1})
     {
@@ -77,7 +77,7 @@ public class Pawn extends Piece
           if(targetPawn.enPassant)
           {
             int ColorModifier = colour? -1:+1;
-            addCaptureMove(board, turn, check, posI+ColorModifier, nextCol);
+            addCaptureMove(board, turn, posI+ColorModifier, nextCol);
           }
         }
       }

@@ -11,12 +11,11 @@ public class Move
   private final boolean colour;
   private final int turn;
   private final boolean capture;
-  private final boolean check;
   private final boolean checkmate;
   private final boolean draw;
   private final boolean castle;
 
-  public Move(Board board, int[] start, int[] end, Piece piece, boolean colour, int turn, boolean capture, boolean check, boolean checkmate, boolean draw)
+  public Move(Board board, int[] start, int[] end, Piece piece, boolean colour, int turn, boolean capture, boolean checkmate, boolean draw)
   {
     this.fen = board.toString();
     this.start = start;
@@ -25,13 +24,12 @@ public class Move
     this.colour = colour;
     this.turn = turn;
     this.capture = capture;
-    this.check = check;
     this.checkmate = checkmate;
     this.draw = draw;
     this.castle = false;
   }
 
-  public Move(Board board, int[] start, int[] end, Piece piece, boolean castle, int turn, boolean checkmate, boolean draw, boolean check)
+  public Move(Board board, int[] start, int[] end, Piece piece, boolean castle, int turn, boolean checkmate, boolean draw)
   {
     this.fen = board.toString();
     this.start = start;
@@ -40,7 +38,6 @@ public class Move
     this.colour = piece.colour;
     this.turn = turn;
     this.capture = false;
-    this.check = check;
     this.checkmate = checkmate;
     this.draw = draw;
     this.castle = castle;
@@ -51,11 +48,10 @@ public class Move
     return "Move{" +
            "\n    start=" + Arrays.toString(start) +
            "\n    end=" + Arrays.toString(end) +
-           "\n    piece=" + piece +
+           "\n    piece=" + piece.getName() +
            "\n    colour=" + colour +
            "\n    turn=" + turn +
            "\n    capture=" + capture +
-           "\n    check=" + check +
            "\n    checkmate=" + checkmate +
            "\n    draw=" + draw +
            "\n    fen='" + fen + '\'' +
@@ -84,14 +80,13 @@ public class Move
            colour == otherMove.colour &&
            turn == otherMove.turn &&
            capture == otherMove.capture &&
-           check == otherMove.check &&
            checkmate == otherMove.checkmate &&
            draw == otherMove.draw;
   }
 
-  public boolean sameDestination(Move otherMove)
+  public boolean sameDestination(int[] otherEnd)
   {
-    return this.end[0] == otherMove.end[0] && this.end[1] == otherMove.end[1];
+    return this.end[0] == otherEnd[0] && this.end[1] == otherEnd[1];
   }
 
   public String getFen()
@@ -127,11 +122,6 @@ public class Move
   public boolean isCapture()
   {
     return capture;
-  }
-
-  public boolean isCheck()
-  {
-    return check;
   }
 
   public boolean isCheckmate()
