@@ -3,6 +3,8 @@ public class King extends Piece
 
   private boolean moved;
   private boolean inCheck;
+  private boolean canKingSideCastle;
+  private boolean canQueenSideCastle;
 
   King(int posI, int posJ, boolean colour, int value)
   {
@@ -17,6 +19,10 @@ public class King extends Piece
     findDiagonalMoves(board, turn);
     findVerticalMoves(board, turn);
     findHorizontalMoves(board, turn);
+    if(canQueenSideCastle || canKingSideCastle)
+    {
+      findCastleMoves(board, turn);
+    }
   }
 
   @Override
@@ -40,10 +46,6 @@ public class King extends Piece
             else if(!targetSquare.occupied)
             {
               addNonCaptureMove(board, turn, nextRow, nextCol);
-            }
-            else
-            {
-              break;
             }
           }
         }
@@ -101,6 +103,41 @@ public class King extends Piece
     }
   }
 
+  private void findCastleMoves(Board board, int turn)
+  {
+    if(queenSideCastle(board, turn))
+    {
+      moves.add(new Move(board, setStart(posI, posJ), setEnd(posI, posJ - 2), this, true, turn,false, false));
+    }
+
+    if(kingSideCastle(board, turn))
+    {
+      moves.add(new Move(board, setStart(posI, posJ), setEnd(posI, posJ + 2), this, true, turn,false, false));
+    }
+  }
+
+  private boolean kingSideCastle(Board board, int turn)
+  {
+    Square oneRight = board.getSquare(posI, posJ + 1);
+    Square twoRight = board.getSquare(posI, posJ + 2);
+    if(!oneRight.occupied && !twoRight.occupied)
+    {
+      return !board.isSquareAttacked(this.colour, twoRight.posI, twoRight.posJ, turn) && !board.isSquareAttacked(this.colour, oneRight.posI, oneRight.posJ, turn);
+    }
+    return false;
+  }
+
+  private boolean queenSideCastle(Board board, int turn)
+  {
+    Square oneLeft = board.getSquare(posI, posJ  - 1);
+    Square twoLeft = board.getSquare(posI, posJ  - 2);
+    if(!oneLeft.occupied && !twoLeft.occupied)
+    {
+      return !board.isSquareAttacked(this.colour, twoLeft.posI, twoLeft.posJ, turn) && !board.isSquareAttacked(this.colour, oneLeft.posI, oneLeft.posJ, turn);
+    }
+    return false;
+  }
+
   @Override
   protected String getName()
   {
@@ -117,6 +154,16 @@ public class King extends Piece
     return inCheck;
   }
 
+  public boolean hasKingSideCastle()
+  {
+    return canKingSideCastle;
+  }
+
+  public boolean hasQueenSideCastle()
+  {
+    return canQueenSideCastle;
+  }
+
   public void setMoved(boolean moved)
   {
     this.moved = moved;
@@ -125,5 +172,15 @@ public class King extends Piece
   public void setInCheck(boolean inCheck)
   {
     this.inCheck = inCheck;
+  }
+
+  public void setCanKingSideCastle(boolean canKingSideCastle)
+  {
+    this.canKingSideCastle = canKingSideCastle;
+  }
+
+  public void setCanQueenSideCastle(boolean canQueenSideCastle)
+  {
+    this.canQueenSideCastle = canQueenSideCastle;
   }
 }

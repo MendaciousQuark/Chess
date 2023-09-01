@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Board
 {
@@ -25,20 +27,37 @@ public class Board
   public String toString()
   {
     StringBuilder fen = new StringBuilder();
+    // catle rights as follows white King, white Queen, black King, black Queen
+    boolean [] castleRights = {false, false, false, false};
+    char [] castleSymbols = {'K', 'Q', 'k', 'q'};
 
     int emptySquares = 0;
     for(int i = 0; i < 8; i++)
     {
       for(int j = 0; j < 8; j++)
       {
-        if(board[i][j].occupied)
+        Square targetSquare = getSquare(i, j);
+        if(targetSquare.occupied)
         {
           if(emptySquares > 0)
           {
             fen.append(emptySquares);
             emptySquares = 0;
           }
-          fen.append(board[i][j].piece.getName());
+          fen.append(targetSquare.piece.getName());
+          if(targetSquare.piece instanceof King king)
+          {
+            if (king.colour)
+            {
+              castleRights[0] = king.hasKingSideCastle();
+              castleRights[1] = king.hasQueenSideCastle();
+            }
+            else
+            {
+              castleRights[2] = king.hasKingSideCastle();
+              castleRights[3] = king.hasQueenSideCastle();
+            }
+          }
         }
         else
         {
@@ -52,8 +71,21 @@ public class Board
       }
       fen.append("/");
     }
-
+    // get rid of last '/'
     fen.deleteCharAt(fen.length() - 1);
+
+    fen.append(" ");
+    //add castling rights to fen
+    boolean atLestOneRight = false;
+    for(int i = 0; i < 4; i++)
+    {
+      fen.append(castleRights[i] ? castleSymbols[i] : "");
+      atLestOneRight = atLestOneRight || castleRights[i];
+    }
+    if(!atLestOneRight)
+    {
+      fen.append("-");
+    }
     return fen.toString();
   }
 
@@ -68,6 +100,11 @@ public class Board
         Piece piece = placePiece(i, j);
         if(piece != null)
         {
+          if(piece instanceof King)
+          {
+            ((King) piece).setCanKingSideCastle(true);
+            ((King) piece).setCanQueenSideCastle(true);
+          }
           this.board[i][j] = new Square(i, j, colour, piece);
         }
         else
@@ -177,6 +214,41 @@ public class Board
         j++;
       }
     }
+
+    if(fenParts.length >= 2)
+    {
+      String castlePart = fenParts[1];
+      if(!Objects.equals(castlePart, "-"))
+      {
+        for(char castleRight: castlePart.toCharArray())
+        {
+          King king = (Character.isUpperCase(castleRight))? (King) getSquare(7, 4).piece: (King) getSquare(0, 4).piece;
+          if(Character.toLowerCase(castleRight) == 'k')
+          {
+            king.setCanKingSideCastle(true);
+          }
+          else
+          {
+            king.setCanQueenSideCastle(true);
+          }
+        }
+      }
+      else
+      {
+        for(Square [] row: board)
+        {
+          for(Square square: row)
+          {
+            if(square.occupied && square.piece instanceof King)
+            {
+              ((King) square.piece).setCanKingSideCastle(false);
+              ((King) square.piece).setCanQueenSideCastle(false);
+            }
+          }
+        }
+      }
+    }
+
   }
 
   public String[] display()

@@ -36,12 +36,12 @@ public class BoardTests
   @Test
   public void testToString() {
     String fen = board.toString();
-    Assertions.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", fen);
-    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR");
+    Assertions.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq", fen);
+    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR KQkq");
     fen = board.toString();
     StringBuilder sb = new StringBuilder();
     Square[][] test = board.getBoard();
-    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR", fen);
+    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR KQkq", fen);
   }
 
   @Test
@@ -54,7 +54,7 @@ public class BoardTests
 
   @Test
   public void testSetUp() {
-    String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+    String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq";
     board.setBoard(fen);
     Square[][] boardArray = board.getBoard();
     int i = 0;
@@ -87,7 +87,7 @@ public class BoardTests
   public void testDisplay() {
     // Implement the test to verify if the display method displays the board correctly
     // Redirect the output to a string and compare it with the expected board representation
-    board.setBoard("8/8/8/8/8/8/8/8");
+    board.setBoard("8/8/8/8/8/8/8/8 -");
     String[] displayBoard = board.display();
     String[] expectedOutput = {
         "  __h___g___f___e___d___c___b___a___\n",
@@ -120,7 +120,7 @@ public class BoardTests
 
     Assertions.assertArrayEquals(expectedOutput, displayBoard);
 
-    board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq");
     expectedOutput = new String[]{
         "  __h___g___f___e___d___c___b___a___\n",
         "  |****    ****    ****    ****    |\n",

@@ -137,7 +137,7 @@ public class KingTests
   @Test
   public void testCastle()
   {
-    board.setBoard("r3k2r/ppp1np1p/2np2p1/2b1pbq1/Q1P1P3/BPNB2N1/P2P1PPP/R3K2R ");
+    board.setBoard("r3k2r/ppp1np1p/2np2p1/2b1pbq1/Q1P1P3/BPNB2N1/P2P1PPP/R3K2R KQkq - 0 1");
     board.findMoves(turn);
 
     King king = (King) board.getSquare(7, 4).piece;
@@ -163,7 +163,7 @@ public class KingTests
     // Create the expected move object for the first illegal move
     Move falseMove1 = new Move(board, start, end, king, king.colour, turn, true, false, false);
 
-    Assertions.assertEquals(4, king.moves.size());
+    Assertions.assertEquals(5, king.moves.size());
     Assertions.assertTrue(king.moves.contains(trueMove1));
     Assertions.assertTrue(king.moves.contains(trueMove2));
     Assertions.assertFalse(king.moves.contains(falseMove1));
