@@ -8,11 +8,16 @@ public class Rook extends Piece
   @Override
   protected void findMoves(Board board, int turn)
   {
-    if(!chained)
-    {
-      findVerticalMoves(board, turn);
-      findHorizontalMoves(board, turn);
-    }
+    findVerticalMoves(board, turn);
+    findHorizontalMoves(board, turn);
+    //if the piece is pinned remove all moves that don't capture the pinning piece
+    removeMovesIfPinned(board);
+  }
+
+  @Override
+  protected Piece copy()
+  {
+    return new Rook(this.posI, this.posJ, this.colour, this.value);
   }
 
   @Override

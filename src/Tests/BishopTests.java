@@ -114,8 +114,16 @@ public class BishopTests
   }
 
   @Test
-  public void testChained()
+  public void testPinned()
   {
+    int turn = 0;
+    board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPBPP/RNBQK1NR");
+    board.findMoves(turn);
+    board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
 
+    Bishop bishop = (Bishop) board.getSquare(6, 5).piece;
+    bishop.findMoves(board, turn);
+
+    Assertions.assertEquals(2, bishop.moves.size());
   }
 }

@@ -9,6 +9,14 @@ public class Bishop extends Piece
   protected void findMoves(Board board, int turn)
   {
     findDiagonalMoves(board, turn);
+    //if the piece is pinned remove all moves that don't capture the pinning piece
+    removeMovesIfPinned(board);
+  }
+
+  @Override
+  protected Piece copy()
+  {
+    return new Bishop(this.posI, this.posJ, this.colour, this.value);
   }
 
   @Override

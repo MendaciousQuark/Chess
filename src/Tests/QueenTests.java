@@ -182,4 +182,17 @@ public class QueenTests
 
   }
 
+  @Test
+  public void testPinned()
+  {
+    int turn = 0;
+    board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPQPP/RNB1KBNR");
+    board.findMoves(turn);
+    board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
+
+    Queen queen = (Queen) board.getSquare(6, 5).piece;
+    queen.findMoves(board, turn);
+
+    Assertions.assertEquals(2, queen.moves.size());
+  }
 }

@@ -72,36 +72,34 @@ public class KnightTests
     int[] start = knight.setStart(4, 3);
     int[] end =  knight.setEnd(2, 2);
     // Create the expected move object for the first move
-    Move trueMove1 = new Move(board, start, end, knight, knight.colour, turn, false, false, false);
+    Move trueMove1 = new Move(board, start, end, knight, knight.colour, turn, true, false, false);
 
     // Set the start and end positions for the second move
     start = knight.setStart(4, 3);
     end =  knight.setEnd(2, 4);
     // Create the expected move object for the second move
-    Move trueMove2 = new Move(board, start, end, knight, knight.colour, turn, false, false, false);
+    Move trueMove2 = new Move(board, start, end, knight, knight.colour, turn, true, false, false);
 
     // Set the start and end positions for the third move
     start = knight.setStart(4, 3);
     end =  knight.setEnd(3, 5);
     // Create the expected move object for the third move
-    Move trueMove3 = new Move(board, start, end, knight, knight.colour, turn, false, false, false);
+    Move trueMove3 = new Move(board, start, end, knight, knight.colour, turn, true, false, false);
 
     // Set the start and end positions for the first illegal move
     start = knight.setStart(4, 3);
     end =  knight.setEnd(6, 2);
     // Create the expected move object for the first illegal move
-    Move falseMove1 = new Move(board, start, end, knight, knight.colour, turn, false, false, false);
+    Move falseMove1 = new Move(board, start, end, knight, knight.colour, turn, true, false, false);
 
     // Set the start and end positions for the second illegal move
     start = knight.setStart(4, 3);
     end =  knight.setEnd(6, 4);
     // Create the expected move object for the second illegal move
-    Move falseMove2 = new Move(board, start, end, knight, knight.colour, turn, false, false, false);
+    Move falseMove2 = new Move(board, start, end, knight, knight.colour, turn, true, false, false);
 
     Assertions.assertEquals(6, knight.moves.size());
     Assertions.assertTrue(knight.moves.contains(trueMove1));
-    System.out.println(knight.moves.get(5));
-    System.out.println(trueMove2);
     Assertions.assertTrue(knight.moves.contains(trueMove2));
     Assertions.assertTrue(knight.moves.contains(trueMove3));
     Assertions.assertFalse(knight.moves.contains(falseMove1));
@@ -109,7 +107,16 @@ public class KnightTests
   }
 
   @Test
-  public void testChained()
+  public void testPinned()
   {
+    int turn = 0;
+    board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPNPP/RNBQKB1R");
+    board.findMoves(turn);
+    board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
+
+    Knight knight = (Knight) board.getSquare(6, 5).piece;
+    knight.findMoves(board, turn);
+
+    Assertions.assertEquals(0, knight.moves.size());
   }
 }

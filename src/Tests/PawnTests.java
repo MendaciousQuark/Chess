@@ -242,9 +242,17 @@ public class PawnTests
 
 
   @Test
-  public void testChained()
+  public void testPinned()
   {
-    
+    int turn = 0;
+    board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/6P1/PPPPP2P/RNBQKBNR");
+    board.findMoves(turn);
+    board.getSquare(5, 6).attackingPieces.add(board.getSquare(4, 7).piece);
+
+    Pawn pawn = (Pawn) board.getSquare(5, 6).piece;
+    pawn.findMoves(board, turn);
+
+    Assertions.assertEquals(1, pawn.moves.size());
   }
 
 

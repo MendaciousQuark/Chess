@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Square
 {
 
@@ -7,6 +9,7 @@ public class Square
   public boolean colour;
   public boolean occupied;
   public Piece piece;
+  public ArrayList<Piece> attackingPieces = new ArrayList<>();
 
   Square(int posI, int posJ, boolean colour, Piece piece)
   {
@@ -15,7 +18,6 @@ public class Square
     this.colour = colour;
     this.occupied = true;
     this.piece = piece;
-
   }
 
   Square(int posI, int posJ, boolean colour)
@@ -24,7 +26,6 @@ public class Square
     this.posJ = posJ;
     this.colour = colour;
     this.occupied = false;
-
     this.piece = null;
   }
 

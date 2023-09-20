@@ -12,13 +12,12 @@ public class Pawn extends Piece
   public void findMoves(Board board, int turn)
   {
     moves.clear();
-    if(!chained)
-    {
-      // order of calls important for tests
-      findNonCapture(board, turn);
-      findCapture(board, turn);
-      findEnPassant(board, turn);
-    }
+    // order of calls important for tests
+    findNonCapture(board, turn);
+    findCapture(board, turn);
+    findEnPassant(board, turn);
+    //if the piece is pinned remove all moves that don't capture the pinning piece
+    removeMovesIfPinned(board);
 
   }
 
@@ -90,6 +89,12 @@ public class Pawn extends Piece
   }
 
   @Override
+  protected Piece copy()
+  {
+    return new Pawn(this.posI, this.posJ, this.colour, this.value);
+  }
+
+  @Override
   protected String getName()
   {
     return (this.colour) ? "P":"p";
@@ -105,8 +110,4 @@ public class Pawn extends Piece
     this.enPassant = enPassant;
   }
 
-  public void setChained(boolean chained)
-  {
-    this.chained = chained;
-  }
 }

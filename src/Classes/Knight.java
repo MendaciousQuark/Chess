@@ -1,3 +1,5 @@
+import java.util.Iterator;
+
 public class Knight extends Piece
 {
 
@@ -9,12 +11,13 @@ public class Knight extends Piece
   @Override
   protected void findMoves(Board board, int turn)
   {
-    if(!chained)
-    {
-      findHorizontalMoves(board, turn);
-      findVerticalMoves(board, turn);
-    }
+    // Find horizontal and vertical moves
+    findHorizontalMoves(board, turn);
+    findVerticalMoves(board, turn);
+    //if the piece is pinned remove all moves that don't capture the pinning piece
+    removeMovesIfPinned(board);
   }
+
 
   @Override
   protected void findHorizontalMoves(Board board, int turn)
@@ -70,6 +73,11 @@ public class Knight extends Piece
     }
   }
 
+  @Override
+  protected Piece copy()
+  {
+    return new Knight(this.posI, this.posJ, this.colour, this.value);
+  }
 
   @Override
   protected String getName()

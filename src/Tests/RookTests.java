@@ -93,9 +93,17 @@ public class RookTests
   }
 
   @Test
-  public void testChained()
+  public void testPinned()
   {
+    int turn = 0;
+    board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPRQPP/1NB1KBNR");
+    board.findMoves(turn);
+    board.getSquare(6, 4).attackingPieces.add(board.getSquare(4, 4).piece);
 
+    Rook rook = (Rook) board.getSquare(6, 4).piece;
+    rook.findMoves(board, turn);
+
+    Assertions.assertEquals(2, rook.moves.size());
   }
 
 }

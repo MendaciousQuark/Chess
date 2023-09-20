@@ -1,5 +1,7 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 
 public class Board
@@ -13,6 +15,7 @@ public class Board
   {
     init();
   }
+
   public Board(String fen)
   {
     init();
@@ -27,7 +30,7 @@ public class Board
   public String toString()
   {
     StringBuilder fen = new StringBuilder();
-    // catle rights as follows white King, white Queen, black King, black Queen
+    // castle rights as follows white King, white Queen, black King, black Queen
     boolean [] castleRights = {false, false, false, false};
     char [] castleSymbols = {'K', 'Q', 'k', 'q'};
 
@@ -152,7 +155,26 @@ public class Board
     return piece;
   }
 
-  private void setUp(String fen)
+  public ArrayList<Piece> findPieces(Class <?> pieceClass)
+  {
+    ArrayList<Piece> piecesFound = new ArrayList<>();
+
+    for(Square [] row: board)
+    {
+      for(Square square: row)
+      {
+        Piece currentPiece = square.piece;
+        if(pieceClass.isInstance(currentPiece))
+        {
+          piecesFound.add(currentPiece);
+        }
+      }
+    }
+
+    return piecesFound;
+  }
+
+  private void setUp(@NotNull String fen)
   {
     String[] fenParts = fen.split(" ");
     String boardPart = fenParts[0];
@@ -297,7 +319,8 @@ public class Board
     return displayBoard;
   }
 
-  private String middleLine(boolean colour, int row)
+  private @NotNull
+  String middleLine(boolean colour, int row)
   {
     StringBuilder sb = new StringBuilder();
     for(int i = 0; i < 8; i++)
@@ -335,8 +358,7 @@ public class Board
       {
         if(square.occupied)
         {
-
-            square.piece.findMoves(new Board(this.toString()), turn);
+            square.piece.findMoves(this, turn);
             if(square.piece.colour)
             {
               whiteMoves.addAll(square.piece.moves);
@@ -345,6 +367,86 @@ public class Board
             {
               blackMoves.addAll((square.piece.moves));
             }
+        }
+      }
+    }
+  }
+
+  public void makeMove(Move move)
+  {
+    Board tempBoard = this.copy();
+    Square startSquare = tempBoard.getSquare(move.getStart()[0], move.getStart()[1]);
+    Square endSquare = tempBoard.getSquare(move.getEnd()[0], move.getEnd()[1]);
+
+    Piece movedPiece = startSquare.piece;
+    movedPiece.posI = endSquare.posI;
+    movedPiece.posJ = endSquare.posJ;
+
+    endSquare.piece = movedPiece;
+    endSquare.occupied = true;
+    startSquare.piece = null;
+    startSquare.occupied = false;
+
+    for(int i = 0; i < 8; i++)
+    {
+      for(int j = 0; j < 8; j++)
+      {
+        Piece oldPiece, newPiece = null;
+        if(tempBoard.board[i][j].occupied)
+        {
+          oldPiece = tempBoard.board[i][j].piece;
+          newPiece = oldPiece.copy();
+        }
+        this.board[i][j] = tempBoard.board[i][j];
+        this.board[i][j].piece = newPiece;
+      }
+
+      Piece targetPiece = endSquare.piece;
+      if(targetPiece instanceof Pawn)
+      {
+        int rowOffset = (targetPiece.colour)? -1:1;
+        getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
+        getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
+      }
+      else
+      {
+        targetPiece.findMoves(this, move.getTurn() + 1);
+        for(Move foundMove : targetPiece.moves)
+        {
+          Square targetSquare = getSquare(foundMove.getEnd()[0], foundMove.getEnd()[1]);
+          targetSquare.attackingPieces.add(targetPiece);
+        }
+      }
+      updateAttackedSquares();
+    }
+  }
+
+  private void updateAttackedSquares()
+  {
+    for (Square[] row : board)
+    {
+      for (Square square : row)
+      {
+        if (!square.attackingPieces.isEmpty())
+        {
+          Iterator<Piece> iterator = square.attackingPieces.iterator();
+          while (iterator.hasNext())
+          {
+            Piece piece = iterator.next();
+            piece.findMoves(this, 0);
+            boolean pieceStillAttacking = false;
+            for (Move move : piece.moves)
+            {
+              if (move.getEnd()[0] == square.posI && move.getEnd()[1] == square.posJ)
+              {
+                pieceStillAttacking = true;
+                break;
+              }
+            }
+            if (!pieceStillAttacking) {
+              iterator.remove(); // Remove the piece using Iterator.
+            }
+          }
         }
       }
     }
@@ -365,47 +467,13 @@ public class Board
     return board[row][col];
   }
 
-  public boolean isSquareAttacked(boolean colour, int destI, int destJ, int turn)
+  public boolean squareIsAttacked(boolean colour, int destI, int destJ)
   {
-      int [] destination = {destI, destJ};
-      ArrayList<Move> movesToCheck = (colour)? blackMoves:whiteMoves;
-      for(Move move: movesToCheck)
-      {
-        if(move.sameDestination(destination))
-        {
-          if(move.getPiece() instanceof Pawn)
-          {
-            if(move.isCapture())
-            {
-              return true;
-            }
-          }
-          else
-          {
-            return true;
-          }
-        }
-      }
-      return hasDiagonallyAdjacentOpposingPawn(colour, destI, destJ);
-  }
-
-  private boolean hasDiagonallyAdjacentOpposingPawn(boolean colour, int posI, int posJ)
-  {
-    int rowOffset = (colour)? -1:1;
-    for(int colOffset: new int[]{-1,1})
+    for(Piece attacker: getSquare(destI, destJ).attackingPieces)
     {
-      int row = posI + rowOffset;
-      int col = posJ + colOffset;
-      if(isValidCoordinate(row, col))
+      if(attacker.colour != colour)
       {
-        Square targetSquare = getSquare(row, col);
-        if(targetSquare.isOccupiedByOpponent(colour))
-        {
-          if(targetSquare.piece instanceof Pawn)
-          {
-            return true;
-          }
-        }
+        return true;
       }
     }
     return false;
@@ -416,4 +484,28 @@ public class Board
     setUp(fen);
   }
 
+  public Board copy()
+  {
+    return new Board(this.toString());
+  }
+
+  public ArrayList<Move> getWhiteMoves()
+  {
+    return whiteMoves;
+  }
+
+  public ArrayList<Move> getBlackMoves()
+  {
+    return blackMoves;
+  }
+
+  public void setWhiteMoves(ArrayList<Move> whiteMoves)
+  {
+    this.whiteMoves = whiteMoves;
+  }
+
+  public void setBlackMoves(ArrayList<Move> blackMoves)
+  {
+    this.blackMoves = blackMoves;
+  }
 }

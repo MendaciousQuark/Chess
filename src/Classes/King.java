@@ -9,8 +9,14 @@ public class King extends Piece
   King(int posI, int posJ, boolean colour, int value)
   {
     super(posI, posJ, colour, value);
-    moved = false;
-    inCheck = false;
+    if(colour)
+    {
+      moved = posI == 7 && posJ == 4;
+    }
+    else
+    {
+      moved = posI == 0 && posJ == 4;
+    }
   }
 
   @Override
@@ -37,7 +43,7 @@ public class King extends Piece
         if(board.isValidCoordinate(nextRow, nextCol))
         {
           Square targetSquare = board.getSquare(nextRow, nextCol);
-          if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+          if(!board.squareIsAttacked(this.colour, nextRow, nextCol))
           {
             if(targetSquare.isOccupiedByOpponent(this.colour))
             {
@@ -63,7 +69,7 @@ public class King extends Piece
       if(board.isValidCoordinate(nextRow, nextCol))
       {
         Square targetSquare = board.getSquare(nextRow, nextCol);
-        if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+        if(!board.squareIsAttacked(this.colour, nextRow, nextCol))
         {
           if(targetSquare.isOccupiedByOpponent(this.colour))
           {
@@ -88,7 +94,7 @@ public class King extends Piece
       if(board.isValidCoordinate(nextRow, nextCol))
       {
         Square targetSquare = board.getSquare(nextRow, nextCol);
-        if(!board.isSquareAttacked(this.colour, nextRow, nextCol, turn))
+        if(!board.squareIsAttacked(this.colour, nextRow, nextCol))
         {
           if(targetSquare.isOccupiedByOpponent(this.colour))
           {
@@ -122,7 +128,7 @@ public class King extends Piece
     Square twoRight = board.getSquare(posI, posJ + 2);
     if(!oneRight.occupied && !twoRight.occupied)
     {
-      return !board.isSquareAttacked(this.colour, twoRight.posI, twoRight.posJ, turn) && !board.isSquareAttacked(this.colour, oneRight.posI, oneRight.posJ, turn);
+      return !board.squareIsAttacked(this.colour, twoRight.posI, twoRight.posJ) && !board.squareIsAttacked(this.colour, oneRight.posI, oneRight.posJ);
     }
     return false;
   }
@@ -133,9 +139,15 @@ public class King extends Piece
     Square twoLeft = board.getSquare(posI, posJ  - 2);
     if(!oneLeft.occupied && !twoLeft.occupied)
     {
-      return !board.isSquareAttacked(this.colour, twoLeft.posI, twoLeft.posJ, turn) && !board.isSquareAttacked(this.colour, oneLeft.posI, oneLeft.posJ, turn);
+      return !board.squareIsAttacked(this.colour, twoLeft.posI, twoLeft.posJ) && !board.squareIsAttacked(this.colour, oneLeft.posI, oneLeft.posJ);
     }
     return false;
+  }
+
+  @Override
+  protected Piece copy()
+  {
+    return new King(this.posI, this.posJ, this.colour, this.value);
   }
 
   @Override

@@ -9,14 +9,18 @@ public class Queen extends Piece
   @Override
   protected void findMoves(Board board, int turn)
   {
-    if(!chained)
-    {
-      findDiagonalMoves(board, turn);
-      findVerticalMoves(board, turn);
-      findHorizontalMoves(board, turn);
-    }
+    findDiagonalMoves(board, turn);
+    findVerticalMoves(board, turn);
+    findHorizontalMoves(board, turn);
+    //if the piece is pinned remove all moves that don't capture the pinning piece
+    removeMovesIfPinned(board);
   }
 
+  @Override
+  protected Piece copy()
+  {
+    return new Queen(this.posI, this.posJ, this.colour, this.value);
+  }
 
   @Override
   protected String getName()
