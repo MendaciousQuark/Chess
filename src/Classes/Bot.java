@@ -14,14 +14,9 @@ public class Bot  extends Player
   }
 
   @Override
-  protected void validateMove(Move move)
+  protected Move getMove(Board board)
   {
-    super.validateMove(move);
-  }
-
-  @Override
-  protected void getMove()
-  {
-    super.getMove();
+    Move move = super.getMove(board);
+    return move;
   }
 }

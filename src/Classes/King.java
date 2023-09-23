@@ -158,7 +158,7 @@ public class King extends Piece
 
   public boolean isMoved()
   {
-    return moved;
+    return !canKingSideCastle && !canQueenSideCastle;
   }
 
   public boolean isInCheck()

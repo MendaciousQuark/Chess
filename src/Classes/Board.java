@@ -10,6 +10,7 @@ public class Board
   private Square[][] board = new Square[8][8];
   private ArrayList<Move> whiteMoves = new ArrayList<>();
   private ArrayList<Move> blackMoves = new ArrayList<>();
+  private int turn;
 
   public  Board()
   {
@@ -174,6 +175,55 @@ public class Board
     return piecesFound;
   }
 
+  public boolean isCheckmate(boolean colour)
+  {
+    //find all possible moves
+    findMoves();
+    //if colour is true (i.e. White), we need to check if black can still make moves
+    ArrayList<Move> movesToCheck = (colour)? blackMoves:whiteMoves;
+
+    //if there are no legal moves return true
+    return movesToCheck.size() == 0;
+  }
+
+  public boolean isKingInCheck(boolean colour)
+  {
+    ArrayList<Piece> kings =  findPieces(King.class);
+    for(Piece king: kings)
+    {
+      if(king.colour == colour)
+      {
+        Square targetSquare = getSquare(king.posI, king.posJ);
+        for(Piece piece: targetSquare.attackingPieces)
+        {
+          if(piece.colour != colour)
+          {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  //mark a king as inCheck
+  public void changeCheckStatus(boolean colour, boolean checkStatus)
+  {
+    //find all kings
+    ArrayList<Piece> kings = findPieces(King.class);
+
+    for(Piece piece: kings)
+    {
+      //select the right king
+      if(piece.colour == colour)
+      {
+        King king = (King) piece;
+        //change the check status
+        king.setInCheck(checkStatus);
+      }
+    }
+  }
+
   private void setUp(@NotNull String fen)
   {
     String[] fenParts = fen.split(" ");
@@ -278,7 +328,7 @@ public class Board
     String[] displayBoard = new String[26];
 
     StringBuilder sb = new StringBuilder();
-    displayBoard[0] = "  __h___g___f___e___d___c___b___a___\n";
+    displayBoard[0] = "  __a___b___c___d___e___f___g___h___\n";
     for(int i = 0; i < 8; i++)
     {
       if(i % 2 == 0)
@@ -287,7 +337,7 @@ public class Board
         {
           if(j == 1)
           {
-            sb.append(i + 1).append(" |").append(middleLine(true, i)).append("|\n");
+            sb.append(8-i).append(" |").append(middleLine(true, i)).append("|\n");
           }
           else
           {
@@ -303,7 +353,7 @@ public class Board
         {
           if(j == 1)
           {
-            sb.append(i + 1).append(" |").append(middleLine(false, i)).append("|\n");
+            sb.append(8-i).append(" |").append(middleLine(false, i)).append("|\n");
           }
           else
           {
@@ -315,6 +365,11 @@ public class Board
       }
     }
     displayBoard[25] = "  |_a___b___c___d___e___f___g___h__|\n";
+
+    for(String row: displayBoard)
+    {
+      System.out.print(row);
+    }
 
     return displayBoard;
   }
@@ -350,15 +405,24 @@ public class Board
     return row >= 0 && row < 8 && col >= 0 && col < 8;
   }
 
-  public void findMoves(int turn)
+  public void findMoves()
   {
+    //empty the lists containing all the moves of each colour
+    blackMoves.clear();
+    whiteMoves.clear();
+
+    //for each row
     for(Square [] row: board)
     {
+      //for each square
       for(Square square: row)
       {
+        //if the square is occupied
         if(square.occupied)
         {
+            //find the legal moves for that piece
             square.piece.findMoves(this, turn);
+            //depending on the colour of the piece add its moves to the relevant arraylist
             if(square.piece.colour)
             {
               whiteMoves.addAll(square.piece.moves);
@@ -370,6 +434,18 @@ public class Board
         }
       }
     }
+  }
+
+  public boolean isValidMove(Move move)
+  {
+    //locate the piece being moved
+    Piece targetPiece = getSquare(move.getStart()[0], move.getStart()[1]).piece;
+
+    //find the legal moves for the piece
+    targetPiece.findMoves(this, turn);
+
+    //if the provided move is one of the legal moves return true otherwise, false.
+    return targetPiece.moves.contains(move);
   }
 
   public void makeMove(Move move)
@@ -499,6 +575,10 @@ public class Board
     return blackMoves;
   }
 
+  public int getTurn()
+  {
+    return turn;
+  }
   public void setWhiteMoves(ArrayList<Move> whiteMoves)
   {
     this.whiteMoves = whiteMoves;
@@ -507,5 +587,10 @@ public class Board
   public void setBlackMoves(ArrayList<Move> blackMoves)
   {
     this.blackMoves = blackMoves;
+  }
+
+  public void setTurn(int turn)
+  {
+    this.turn = turn;
   }
 }

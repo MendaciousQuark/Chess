@@ -16,8 +16,6 @@ public class GameTests
   {
     Assertions.assertEquals(0, game.getTurn());
     Assertions.assertNotNull(game.getBoard());
-    Assertions.assertNotNull(game.getHuman());
-    Assertions.assertNotNull(game.getBot());
   }
 
   @Test

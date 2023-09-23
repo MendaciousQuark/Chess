@@ -1,19 +1,18 @@
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Move
 {
 
-  private final String fen;
-  private final int[] start;
-  private final int[] end;
-  private final Piece piece;
-  private final boolean colour;
-  private final int turn;
-  private final boolean capture;
-  private final boolean checkmate;
-  private final boolean draw;
-  private final boolean castle;
+  private String fen;
+  private int[] start;
+  private int[] end;
+  private Piece piece;
+  private boolean colour;
+  private int turn;
+  private boolean capture;
+  private boolean checkmate;
+  private boolean draw;
+  private boolean castle;
 
   public Move(Board board, int[] start, int[] end, Piece piece, boolean colour, int turn, boolean capture, boolean checkmate, boolean draw)
   {
@@ -43,6 +42,19 @@ public class Move
     this.castle = castle;
   }
 
+  public Move()
+  {
+    this.fen = "fen";
+    this.start = null;
+    this.end = null;
+    this.piece = null;
+    this.colour = false;
+    this.turn = 0;
+    this.capture = false;
+    this.checkmate = false;
+    this.draw = false;
+    this.castle = false;
+  }
   @Override
   public String toString() {
     return "Move{" +
@@ -137,5 +149,55 @@ public class Move
   public boolean isCastle()
   {
     return castle;
+  }
+
+  public void setFen(String fen)
+  {
+    this.fen = fen;
+  }
+
+  public void setStart(int[] start)
+  {
+    this.start = start;
+  }
+
+  public void setEnd(int[] end)
+  {
+    this.end = end;
+  }
+
+  public void setPiece(Piece piece)
+  {
+    this.piece = piece;
+  }
+
+  public void setColour(boolean colour)
+  {
+    this.colour = colour;
+  }
+
+  public void setTurn(int turn)
+  {
+    this.turn = turn;
+  }
+
+  public void setCapture(boolean capture)
+  {
+    this.capture = capture;
+  }
+
+  public void setCheckmate(boolean checkmate)
+  {
+    this.checkmate = checkmate;
+  }
+
+  public void setDraw(boolean draw)
+  {
+    this.draw = draw;
+  }
+
+  public void setCastle(boolean castle)
+  {
+    this.castle = castle;
   }
 }

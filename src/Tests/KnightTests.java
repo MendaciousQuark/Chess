@@ -5,17 +5,18 @@ import org.junit.jupiter.api.Test;
 public class KnightTests
 {
   private Board board;
+  int turn;
 
   @BeforeEach
   public void setup()
   {
     board = new Board();
+    turn = board.getTurn();
   }
 
   @Test
   public void testNonCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/pppppppp/8/8/3N4/5P2/PPPPP1PP/RNBQKB1R");
 
     Knight knight = (Knight) board.getSquare(4, 3).piece;
@@ -62,7 +63,6 @@ public class KnightTests
   @Test
   public void testCapture()
   {
-    int turn = 1;
     board.setBoard("rnb1kbn1/pp1ppppp/2p1q3/5r2/3N2P1/8/PPPPP1PP/RNBQKB1R");
 
     Knight knight = (Knight) board.getSquare(4, 3).piece;
@@ -109,9 +109,8 @@ public class KnightTests
   @Test
   public void testPinned()
   {
-    int turn = 0;
     board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPNPP/RNBQKB1R");
-    board.findMoves(turn);
+    board.findMoves();
     board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
 
     Knight knight = (Knight) board.getSquare(6, 5).piece;

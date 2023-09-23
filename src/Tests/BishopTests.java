@@ -5,17 +5,18 @@ import org.junit.jupiter.api.Test;
 public class BishopTests
 {
   private Board board;
+  private int turn;
 
   @BeforeEach
   public void setup()
   {
     board = new Board();
+    turn = board.getTurn();
   }
 
   @Test
   public void testNonCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/pppppppp/8/3B4/8/8/PPPPPPPP/RN1QKBNR");
 
     Bishop bishop = (Bishop) board.getSquare(3, 3).piece;
@@ -82,7 +83,6 @@ public class BishopTests
   @Test
   public void testCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/pppppppp/8/3B4/8/8/PPPPPPPP/RN1QKBNR");
 
     Bishop bishop = (Bishop) board.getSquare(3, 3).piece;
@@ -116,13 +116,12 @@ public class BishopTests
   @Test
   public void testPinned()
   {
-    int turn = 0;
     board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPBPP/RNBQK1NR");
-    board.findMoves(turn);
+    board.findMoves();
     board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
 
     Bishop bishop = (Bishop) board.getSquare(6, 5).piece;
-    bishop.findMoves(board, turn);
+    bishop.findMoves(board, board.getTurn());
 
     Assertions.assertEquals(2, bishop.moves.size());
   }

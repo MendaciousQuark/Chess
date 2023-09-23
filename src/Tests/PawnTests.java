@@ -5,16 +5,17 @@ import org.junit.jupiter.api.Test;
 public class PawnTests
 {
   private Board board;
+  private int turn;
 
   @BeforeEach
   public void setup()
   {
     board = new Board();
+    turn = board.getTurn();
   }
 
   @Test
   public void testNonCapture() {
-    int turn = 1;
     // Set up the board with a specific initial position
     board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
 
@@ -116,8 +117,6 @@ public class PawnTests
 
   @Test
   public void testCapture() {
-    // Set the current turn to 5
-    int turn = 5;
     // Set up the board with a specific initial position
     board.setBoard("rnbqkbnr/1p3ppp/3p4/p1p1p3/1PPP4/8/P3PPPP/RNBQKBNR");
 
@@ -176,8 +175,6 @@ public class PawnTests
 
   @Test
   public void testEnPassant() {
-    // Set up the turn number to simulate a specific game state
-    int turn = 10;
 
     // Set up the initial board position with a scenario where En passant move is possible
     board.setBoard("rnbqkbnr/1p4pp/3p4/p1p1ppP1/1PPP4/8/P3PP1P/RNBQKBNR");
@@ -240,13 +237,12 @@ public class PawnTests
     Assertions.assertFalse(pawn.moves.contains(move4));
   }
 
-
   @Test
   public void testPinned()
   {
     int turn = 0;
     board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/6P1/PPPPP2P/RNBQKBNR");
-    board.findMoves(turn);
+    board.findMoves();
     board.getSquare(5, 6).attackingPieces.add(board.getSquare(4, 7).piece);
 
     Pawn pawn = (Pawn) board.getSquare(5, 6).piece;

@@ -3,7 +3,6 @@ import java.util.ArrayList;
 public class Square
 {
 
-
   public int posI;
   public int posJ;
   public boolean colour;

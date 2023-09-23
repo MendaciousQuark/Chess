@@ -13,14 +13,14 @@ public class KingTests
   public void setup()
   {
     board = new Board();
-    turn = 1;
+    turn = board.getTurn();
   }
 
   @Test
   public void testStraightNonCapture()
   {
     board.setBoard("rnbqkbnr/pppppppp/8/8/3PK3/5P2/PP1PP1PP/RNBQ1BNR");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(4, 4).piece;
     king.moves.clear();
@@ -62,7 +62,7 @@ public class KingTests
   public void testDiagonalNonCapture()
   {
     board.setBoard("rnbqkbnr/pppppppp/8/8/3PK3/5P2/PP1PP1PP/RNBQ1BNR");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(4, 4).piece;
     king.moves.clear();
@@ -103,7 +103,7 @@ public class KingTests
   public void testCapture()
   {
     board.setBoard("r1bqkbnr/pppp1ppp/8/3np3/4KN2/8/PP1PPPPP/RNBQPB1R");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(4, 4).piece;
     king.moves.clear();
@@ -138,7 +138,7 @@ public class KingTests
   public void testCastle()
   {
     board.setBoard("r3k2r/ppp1np1p/2np2p1/2b1pbq1/Q1P1P3/BPNB2N1/P2P1PPP/R3K2R KQkq - 0 1");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(7, 4).piece;
     king.setMoved(false);
@@ -173,7 +173,7 @@ public class KingTests
   public void testMoveOutOfCheck()
   {
     board.setBoard("r3k2r/ppp1np1p/3p2p1/2b1pb1N/Q1P1P2q/BPN2P2/P2PB1PP/R2nK2R");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(7, 4).piece;
     king.setInCheck(true);
@@ -209,7 +209,7 @@ public class KingTests
   public void testMoveIntoCheck()
   {
     board.setBoard("rn2kbnr/pppppppp/1b3q2/8/4K3/3P4/PPP1PPPP/RNBQ1BNR");
-    board.findMoves(turn);
+    board.findMoves();
 
     King king = (King) board.getSquare(4, 4).piece;
     king.moves.clear();

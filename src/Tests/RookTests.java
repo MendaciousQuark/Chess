@@ -6,16 +6,18 @@ public class RookTests
 {
   private Board board;
 
+  private int turn;
+
   @BeforeEach
   public void setup()
   {
     board = new Board();
+    turn = board.getTurn();
   }
 
   @Test
   public void testNonCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/p1p1p1pp/1p1R1p2/3P4/7P/8/PPP1PPP1/RNBQKBN1");
 
     Rook rook = (Rook) board.getSquare(2, 3).piece;
@@ -55,7 +57,6 @@ public class RookTests
   @Test
   public void testCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/p1p1p1pp/1p1R1p2/3P4/7P/8/PPP1PPP1/RNBQKBN1");
 
     Rook rook = (Rook) board.getSquare(2, 3).piece;
@@ -95,9 +96,8 @@ public class RookTests
   @Test
   public void testPinned()
   {
-    int turn = 0;
     board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPRQPP/1NB1KBNR");
-    board.findMoves(turn);
+    board.findMoves();
     board.getSquare(6, 4).attackingPieces.add(board.getSquare(4, 4).piece);
 
     Rook rook = (Rook) board.getSquare(6, 4).piece;

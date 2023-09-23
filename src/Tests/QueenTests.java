@@ -5,17 +5,18 @@ import org.junit.jupiter.api.Test;
 public class QueenTests
 {
   private Board board;
+  private int turn;
 
   @BeforeEach
   public void setup()
   {
     board = new Board();
+    turn = board.getTurn();
   }
 
   @Test
   public void testDiagonal()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/pppppppp/8/3Q4/8/8/PPPPPPPP/RN1QKBNR");
 
     Queen queen = (Queen) board.getSquare(3, 3).piece;
@@ -83,7 +84,6 @@ public class QueenTests
   @Test
   public void testStraight()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/p1p1p1pp/1p1Q1p2/3P4/7P/8/PPP1PPP1/RNBQKBN1");
 
     Queen queen = (Queen) board.getSquare(2, 3).piece;
@@ -123,7 +123,6 @@ public class QueenTests
   @Test
   public void testCapture()
   {
-    int turn = 1;
     board.setBoard("rnbqkbnr/p1p1p1pp/1p1Q1p2/3P4/7P/8/PPP1PPP1/RNBQKBN1");
 
     Queen queen = (Queen) board.getSquare(2, 3).piece;
@@ -185,9 +184,8 @@ public class QueenTests
   @Test
   public void testPinned()
   {
-    int turn = 0;
     board.setBoard("rnb1k1nr/pppppppp/8/8/4qP1b/8/PPPPPQPP/RNB1KBNR");
-    board.findMoves(turn);
+    board.findMoves();
     board.getSquare(6, 5).attackingPieces.add(board.getSquare(4, 7).piece);
 
     Queen queen = (Queen) board.getSquare(6, 5).piece;
