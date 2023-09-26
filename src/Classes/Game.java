@@ -98,6 +98,7 @@ public class Game {
 
 
   public static void main(String[] args) {
+    //index out of range when accessing h file
     Game game = new Game(true);
     game.play();
   }

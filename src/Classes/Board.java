@@ -481,8 +481,14 @@ public class Board
       if(targetPiece instanceof Pawn)
       {
         int rowOffset = (targetPiece.colour)? -1:1;
-        getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
-        getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
+        if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ + 1))
+        {
+          getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
+        }
+        if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ - 1))
+        {
+          getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
+        }
       }
       else
       {
