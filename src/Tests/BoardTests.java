@@ -36,12 +36,12 @@ public class BoardTests
   @Test
   public void testToString() {
     String fen = board.toString();
-    Assertions.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", fen);
-    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR");
+    Assertions.assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq", fen);
+    board.setBoard("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR KQkq");
     fen = board.toString();
     StringBuilder sb = new StringBuilder();
     Square[][] test = board.getBoard();
-    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR", fen);
+    Assertions.assertEquals("rnbqkbnr/pppppp2/6pp/8/3NR3/4PPP1/1PPP3P/2BQKBNR KQkq", fen);
   }
 
   @Test
@@ -54,7 +54,7 @@ public class BoardTests
 
   @Test
   public void testSetUp() {
-    String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+    String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq";
     board.setBoard(fen);
     Square[][] boardArray = board.getBoard();
     int i = 0;
@@ -85,72 +85,72 @@ public class BoardTests
 
   @Test
   public void testDisplay() {
-    // Implement the test to verify if the Display method displays the board correctly
+    // Implement the test to verify if the display method displays the board correctly
     // Redirect the output to a string and compare it with the expected board representation
-    board.setBoard("8/8/8/8/8/8/8/8");
-    String[] displayBoard = board.Display();
+    board.setBoard("8/8/8/8/8/8/8/8 -");
+    String[] displayBoard = board.display();
     String[] expectedOutput = {
-        "  __h___g___f___e___d___c___b___a___\n",
+        "  __a___b___c___d___e___f___g___h___\n",
         "  |****    ****    ****    ****    |\n",
-        "1 |****    ****    ****    ****    |\n",
-        "  |****    ****    ****    ****    |\n",
-        "  |    ****    ****    ****    ****|\n",
-        "2 |    ****    ****    ****    ****|\n",
-        "  |    ****    ****    ****    ****|\n",
-        "  |****    ****    ****    ****    |\n",
-        "3 |****    ****    ****    ****    |\n",
+        "8 |****    ****    ****    ****    |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "4 |    ****    ****    ****    ****|\n",
+        "7 |    ****    ****    ****    ****|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |****    ****    ****    ****    |\n",
-        "5 |****    ****    ****    ****    |\n",
+        "6 |****    ****    ****    ****    |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "6 |    ****    ****    ****    ****|\n",
+        "5 |    ****    ****    ****    ****|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |****    ****    ****    ****    |\n",
-        "7 |****    ****    ****    ****    |\n",
+        "4 |****    ****    ****    ****    |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "8 |    ****    ****    ****    ****|\n",
+        "3 |    ****    ****    ****    ****|\n",
+        "  |    ****    ****    ****    ****|\n",
+        "  |****    ****    ****    ****    |\n",
+        "2 |****    ****    ****    ****    |\n",
+        "  |****    ****    ****    ****    |\n",
+        "  |    ****    ****    ****    ****|\n",
+        "1 |    ****    ****    ****    ****|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |_a___b___c___d___e___f___g___h__|\n"
     };
 
     Assertions.assertArrayEquals(expectedOutput, displayBoard);
 
-    board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR");
+    board.setBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR KQkq");
     expectedOutput = new String[]{
-        "  __h___g___f___e___d___c___b___a___\n",
+        "  __a___b___c___d___e___f___g___h___\n",
         "  |****    ****    ****    ****    |\n",
-        "1 |*rr* nn *bb* qq *kk* bb *nn* rr |\n",
-        "  |****    ****    ****    ****    |\n",
-        "  |    ****    ****    ****    ****|\n",
-        "2 | pp *pp* pp *pp* pp *pp* pp *pp*|\n",
-        "  |    ****    ****    ****    ****|\n",
-        "  |****    ****    ****    ****    |\n",
-        "3 |****    ****    ****    ****    |\n",
+        "8 |*rr* nn *bb* qq *kk* bb *nn* rr |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "4 |    ****    ****    ****    ****|\n",
+        "7 | pp *pp* pp *pp* pp *pp* pp *pp*|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |****    ****    ****    ****    |\n",
-        "5 |****    ****    ****    ****    |\n",
+        "6 |****    ****    ****    ****    |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "6 |    ****    ****    ****    ****|\n",
+        "5 |    ****    ****    ****    ****|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |****    ****    ****    ****    |\n",
-        "7 |*PP* PP *PP* PP *PP* PP *PP* PP |\n",
+        "4 |****    ****    ****    ****    |\n",
         "  |****    ****    ****    ****    |\n",
         "  |    ****    ****    ****    ****|\n",
-        "8 | RR *NN* BB *QQ* KK *BB* NN *RR*|\n",
+        "3 |    ****    ****    ****    ****|\n",
+        "  |    ****    ****    ****    ****|\n",
+        "  |****    ****    ****    ****    |\n",
+        "2 |*PP* PP *PP* PP *PP* PP *PP* PP |\n",
+        "  |****    ****    ****    ****    |\n",
+        "  |    ****    ****    ****    ****|\n",
+        "1 | RR *NN* BB *QQ* KK *BB* NN *RR*|\n",
         "  |    ****    ****    ****    ****|\n",
         "  |_a___b___c___d___e___f___g___h__|\n"
     };
 
-    displayBoard = board.Display();
+    displayBoard = board.display();
     Assertions.assertArrayEquals(expectedOutput, displayBoard);
   }
 

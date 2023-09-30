@@ -1,40 +1,63 @@
+import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Objects;
+
 public class Board
 {
 
   private Square[][] board = new Square[8][8];
+  private ArrayList<Move> whiteMoves = new ArrayList<>();
+  private ArrayList<Move> blackMoves = new ArrayList<>();
+  private int turn;
 
-  Board()
+  public  Board()
   {
     init();
   }
-  Board(String fen){
+
+  public Board(String fen)
+  {
     init();
     setUp(fen);
   }
-  Board(Square[][] board)
-  {
-    this.board = board;
-  }
-
 
   @Override
   public String toString()
   {
     StringBuilder fen = new StringBuilder();
+    // castle rights as follows white King, white Queen, black King, black Queen
+    boolean [] castleRights = {false, false, false, false};
+    char [] castleSymbols = {'K', 'Q', 'k', 'q'};
 
     int emptySquares = 0;
     for(int i = 0; i < 8; i++)
     {
       for(int j = 0; j < 8; j++)
       {
-        if(board[i][j].occupied)
+        Square targetSquare = getSquare(i, j);
+        if(targetSquare.occupied)
         {
           if(emptySquares > 0)
           {
             fen.append(emptySquares);
             emptySquares = 0;
           }
-          fen.append(board[i][j].piece.getName());
+          fen.append(targetSquare.piece.getName());
+          if(targetSquare.piece instanceof King king)
+          {
+            if (king.colour)
+            {
+              castleRights[0] = king.hasKingSideCastle();
+              castleRights[1] = king.hasQueenSideCastle();
+            }
+            else
+            {
+              castleRights[2] = king.hasKingSideCastle();
+              castleRights[3] = king.hasQueenSideCastle();
+            }
+          }
         }
         else
         {
@@ -48,28 +71,57 @@ public class Board
       }
       fen.append("/");
     }
-
+    // get rid of last '/'
     fen.deleteCharAt(fen.length() - 1);
+
+    fen.append(" ");
+    //add castling rights to fen
+    boolean atLestOneRight = false;
+    for(int i = 0; i < 4; i++)
+    {
+      fen.append(castleRights[i] ? castleSymbols[i] : "");
+      atLestOneRight = atLestOneRight || castleRights[i];
+    }
+    if(!atLestOneRight)
+    {
+      fen.append("-");
+    }
     return fen.toString();
   }
 
+  //sets up initial board position of any game
   private void init()
   {
     boolean colour;
+    //for each row on the board
     for(int i = 0; i < 8; i++)
     {
+      //determine the colour of the starting square
       colour = i % 2 == 0;
+      //for each column
       for(int j = 0; j < 8; j++)
       {
+        //place a piece depending on the location of the board we have reached (can be null)
         Piece piece = placePiece(i, j);
+        //if we have place a piece
         if(piece != null)
         {
+          //if the placed piece is a King
+          if(piece instanceof King king)
+          {
+            //set the castling rights of that king
+            king.setCanKingSideCastle(true);
+            king.setCanQueenSideCastle(true);
+          }
+          //initialise the square we are currently working on with a piece
           this.board[i][j] = new Square(i, j, colour, piece);
         }
         else
         {
+          //initialise the square we are currently working on without a piece
           this.board[i][j] = new Square(i, j, colour);
         }
+        //alternate the colour of the rest of the squares on the row
         colour = !colour;
       }
     }
@@ -80,27 +132,38 @@ public class Board
     Piece piece = null;
     boolean pieceColour;
 
+    //if we are in the top two rows of the Board
     if(i < 2)
     {
+      //the piece should be black
       pieceColour = false;
     }
+    //if we are in the bottom two rows off the board
     else if (i > 5)
     {
+      //the piece should be black
       pieceColour = true;
     }
+    //in any other case
     else
     {
+      //there shouldn't be a piece in the location
       return null;
     }
 
+    //In the second and penultimate row
     if(i == 1 || i==6)
     {
+      //initialise pawns
       piece = new Pawn(i, j, pieceColour, 1);
     }
+    //in the first and last row
     else
     {
+      //determine which square in the row we are on
       switch(j % 8)
       {
+        //initialise the corresponding piece
         case 0, 7 -> piece = new Rook(i, j, pieceColour, 5);
         case 1, 6 -> piece = new Knight(i, j, pieceColour, 3);
         case 2, 5 -> piece = new Bishop(i, j, pieceColour, 3);
@@ -108,27 +171,136 @@ public class Board
         case 4 -> piece = new King(i, j, pieceColour, 100);
       }
     }
+    //return the piece, so it can be added to the square.
     return piece;
   }
 
-  private void setUp(String fen)
+  public ArrayList<Piece> findPieces(Class <?> pieceClass)
+  {
+    ArrayList<Piece> piecesFound = new ArrayList<>();
+
+    //iterate through the whole board
+    for(Square [] row: board)
+    {
+      for(Square square: row)
+      {
+        //check the piece of each square
+        Piece currentPiece = square.piece;
+        //if the piece is of the class we are looking for
+        if(pieceClass.isInstance(currentPiece))
+        {
+          //add the piece to the piece our list
+          piecesFound.add(currentPiece);
+        }
+      }
+    }
+
+    return piecesFound;
+  }
+
+  public King findKing(boolean colour)
+  {
+    King king = null;
+    //find all King pieces
+    ArrayList<Piece> kings = findPieces(King.class);
+    for(Piece piece: kings)
+    {
+      //determine which king is of the right colour
+      if(piece.colour == colour)
+      {
+        //assign that king
+        king = (King) piece;
+      }
+    }
+    //return the king
+    return king;
+  }
+
+  public boolean isCheckmate(boolean colour)
+  {
+    //find all possible moves
+    findMoves();
+    //if colour is true (i.e. White), we need to check if black can still make moves
+    ArrayList<Move> movesToCheck = (colour)? whiteMoves:blackMoves;
+
+    //if there are no legal moves return true
+    return movesToCheck.size() == 0;
+  }
+
+  public boolean isKingInCheck(boolean colour)
+  {
+    //find the king
+    King king = findKing(colour);
+    //target the kings square
+    Square targetSquare = getSquare(king.posI, king.posJ);
+
+    //check every piece that is attacking that square
+    for(Piece piece: targetSquare.attackingPieces)
+    {
+      //if it is an opposing piece
+      if(piece.colour != colour)
+      {
+        //check
+        return true;
+      }
+    }
+    //not check
+    return false;
+  }
+
+  //mark a king as inCheck
+  public void changeCheckStatus(boolean colour, boolean checkStatus)
+  {
+    //find all kings
+    ArrayList<Piece> kings = findPieces(King.class);
+
+    for(Piece piece: kings)
+    {
+      //select the right king
+      if(piece.colour == colour)
+      {
+        King king = (King) piece;
+        //change the check status
+        king.setInCheck(checkStatus);
+
+        //check through every piece attacking the kings square
+        for(Piece attacker: getSquare(king.posI, king.posJ).attackingPieces)
+        {
+          //if opposing piece
+          if(attacker.colour != king.colour)
+          {
+            //add the piece to the ones giving check
+            king.checkingPieces.add(attacker);
+          }
+        }
+      }
+    }
+  }
+
+  private void setUp(@NotNull String fen)
   {
     String[] fenParts = fen.split(" ");
     String boardPart = fenParts[0];
 
     int i = 0, j = 0;
-    for (char c : boardPart.toCharArray()) {
-      if (c == '/') {
+    for (char c : boardPart.toCharArray())
+    {
+      if (c == '/')
+      {
         i++;
         j = 0;
-      } else if (Character.isDigit(c)) {
+      }
+      else if (Character.isDigit(c))
+      {
         int emptySquares = Character.getNumericValue(c);
-        for (int k = 0; k < emptySquares; k++) {
+        for (int k = 0; k < emptySquares; k++)
+        {
           board[i][j].occupied = false;
           board[i][j].piece = null;
           j++;
         }
-      } else
+      }
+      else
       {
         boolean isUpperCase = Character.isUpperCase(c);
         char pieceCode = Character.toLowerCase(c);
@@ -167,14 +339,49 @@ public class Board
         j++;
       }
     }
+
+    if(fenParts.length >= 2)
+    {
+      String castlePart = fenParts[1];
+      if(!Objects.equals(castlePart, "-"))
+      {
+        for(char castleRight: castlePart.toCharArray())
+        {
+          King king = (Character.isUpperCase(castleRight))? (King) getSquare(7, 4).piece: (King) getSquare(0, 4).piece;
+          if(Character.toLowerCase(castleRight) == 'k')
+          {
+            king.setCanKingSideCastle(true);
+          }
+          else
+          {
+            king.setCanQueenSideCastle(true);
+          }
+        }
+      }
+      else
+      {
+        for(Square [] row: board)
+        {
+          for(Square square: row)
+          {
+            if(square.occupied && square.piece instanceof King)
+            {
+              ((King) square.piece).setCanKingSideCastle(false);
+              ((King) square.piece).setCanQueenSideCastle(false);
+            }
+          }
+        }
+      }
+    }
+
   }
 
-  public String[] Display()
+  public String[] display()
   {
     String[] displayBoard = new String[26];
 
     StringBuilder sb = new StringBuilder();
-    displayBoard[0] = "  __h___g___f___e___d___c___b___a___\n";
+    displayBoard[0] = "  __a___b___c___d___e___f___g___h___\n";
     for(int i = 0; i < 8; i++)
     {
       if(i % 2 == 0)
@@ -183,7 +390,7 @@ public class Board
         {
           if(j == 1)
           {
-            sb.append(i + 1).append(" |").append(middleLine(true, i)).append("|\n");
+            sb.append(8-i).append(" |").append(middleLine(true, i)).append("|\n");
           }
           else
           {
@@ -199,7 +406,7 @@ public class Board
         {
           if(j == 1)
           {
-            sb.append(i + 1).append(" |").append(middleLine(false, i)).append("|\n");
+            sb.append(8-i).append(" |").append(middleLine(false, i)).append("|\n");
           }
           else
           {
@@ -212,10 +419,16 @@ public class Board
     }
     displayBoard[25] = "  |_a___b___c___d___e___f___g___h__|\n";
 
+    for(String row: displayBoard)
+    {
+      System.out.print(row);
+    }
+
     return displayBoard;
   }
 
-  private String middleLine(boolean colour, int row)
+  private @NotNull
+  String middleLine(boolean colour, int row)
   {
     StringBuilder sb = new StringBuilder();
     for(int i = 0; i < 8; i++)
@@ -241,6 +454,172 @@ public class Board
     return sb.toString();
   }
 
+  public boolean isValidCoordinate(int row, int col) {
+    return row >= 0 && row < 8 && col >= 0 && col < 8;
+  }
+
+  public void findMoves()
+  {
+    //empty the lists containing all the moves of each colour
+    blackMoves.clear();
+    whiteMoves.clear();
+
+    //for each row
+    for(Square [] row: board)
+    {
+      //for each square
+      for(Square square: row)
+      {
+        //if the square is occupied
+        if(square.occupied)
+        {
+          //find the legal moves for that piece
+          square.piece.findMoves(this, turn);
+          //for each found move
+          if(square.piece instanceof Pawn)
+          {
+            addPawnAttacks(square.piece);
+          }
+          else
+          {
+            for(Move move : square.piece.moves)
+            {
+              //find the destination of the move
+              Square targetSquare = getSquare(move.getEnd()[0], move.getEnd()[1]);
+              //if the piece hasn't been added as an attacking piece
+              if(!targetSquare.attackingPieces.contains(move.getPiece()))
+              {
+                //add it
+                targetSquare.attackingPieces.add(move.getPiece());
+              }
+            }
+          }
+          //depending on the colour of the piece add its moves to the relevant arraylist
+          if(square.piece.colour)
+          {
+            whiteMoves.addAll(square.piece.moves);
+          }
+          else
+          {
+            blackMoves.addAll((square.piece.moves));
+          }
+        }
+      }
+    }
+  }
+
+  public boolean isValidMove(Move move)
+  {
+    //locate the piece being moved
+    Piece targetPiece = getSquare(move.getStart()[0], move.getStart()[1]).piece;
+
+    //find the legal moves for the piece
+    targetPiece.findMoves(this, turn);
+
+    //if the provided move is one of the legal moves return true otherwise, false.
+    return targetPiece.moves.contains(move);
+  }
+
+  public void makeMove(Move move)
+  {
+    Board tempBoard = this.copy();
+    Square startSquare = tempBoard.getSquare(move.getStart()[0], move.getStart()[1]);
+    Square endSquare = tempBoard.getSquare(move.getEnd()[0], move.getEnd()[1]);
+
+    Piece movedPiece = startSquare.piece;
+    movedPiece.posI = endSquare.posI;
+    movedPiece.posJ = endSquare.posJ;
+
+    endSquare.piece = movedPiece;
+    endSquare.occupied = true;
+    startSquare.piece = null;
+    startSquare.occupied = false;
+
+    for(int i = 0; i < 8; i++)
+    {
+      for(int j = 0; j < 8; j++)
+      {
+        Piece oldPiece, newPiece = null;
+        if(tempBoard.board[i][j].occupied)
+        {
+          oldPiece = tempBoard.board[i][j].piece;
+          newPiece = oldPiece.copy();
+        }
+        this.board[i][j] = tempBoard.board[i][j];
+        this.board[i][j].piece = newPiece;
+      }
+
+      Piece targetPiece = endSquare.piece;
+      if(targetPiece instanceof Pawn)
+      {
+        addPawnAttacks(targetPiece);
+      }
+      else
+      {
+        targetPiece.findMoves(this, move.getTurn() + 1);
+        for(Move foundMove : targetPiece.moves)
+        {
+          Square targetSquare = getSquare(foundMove.getEnd()[0], foundMove.getEnd()[1]);
+          if(!targetSquare.attackingPieces.contains(targetPiece))
+          {
+            targetSquare.attackingPieces.add(targetPiece);
+          }
+        }
+      }
+      updateAttackedSquares();
+    }
+  }
+
+  private void addPawnAttacks(Piece targetPiece)
+  {
+    //determine the direction the pawn is moving in
+    int rowOffset = (targetPiece.colour)? -1:1;
+
+    //if right diagonal is a valid coordinate
+    if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ + 1))
+    {
+      //add the pawn to that squares attacking pieces
+      getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
+    }
+    //if left diagonal is a valid coordinate
+    if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ - 1))
+    {
+      //add the pawn to that squares attacking pieces
+      getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
+    }
+  }
+
+  private void updateAttackedSquares()
+  {
+    for (Square[] row : board)
+    {
+      for (Square square : row)
+      {
+        if (!square.attackingPieces.isEmpty())
+        {
+          Iterator<Piece> iterator = square.attackingPieces.iterator();
+          while (iterator.hasNext())
+          {
+            Piece piece = iterator.next();
+            piece.findMoves(this, 0);
+            boolean pieceStillAttacking = false;
+            for (Move move : piece.moves)
+            {
+              if (move.getEnd()[0] == square.posI && move.getEnd()[1] == square.posJ)
+              {
+                pieceStillAttacking = true;
+                break;
+              }
+            }
+            if (!pieceStillAttacking) {
+              iterator.remove(); // Remove the piece using Iterator.
+            }
+          }
+        }
+      }
+    }
+  }
+
   public double evaluate()
   {
     return 0.0;
@@ -251,9 +630,51 @@ public class Board
     return board;
   }
 
+  public Square getSquare(int row, int col)
+  {
+    return board[row][col];
+  }
+
+  public boolean squareIsAttacked(boolean colour, int destI, int destJ)
+  {
+    for(Piece attacker: getSquare(destI, destJ).attackingPieces)
+    {
+      if(attacker.colour != colour)
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void setBoard(String fen)
   {
     setUp(fen);
+  }
+
+  public Board copy()
+  {
+    return new Board(this.toString());
+  }
+
+  public ArrayList<Move> getWhiteMoves()
+  {
+    return whiteMoves;
+  }
+
+  public ArrayList<Move> getBlackMoves()
+  {
+    return blackMoves;
+  }
+
+  public int getTurn()
+  {
+    return turn;
+  }
+
+  public void setTurn(int turn)
+  {
+    this.turn = turn;
   }
 
 }

@@ -2,19 +2,87 @@ public class Game {
 
   private int turn;
   private Board board;
-  private Player human;
-  private Bot bot;
+  private Player player1;
+  private Player player2;
 
   public Game() {
     turn = 0;
     board = new Board();
-    human = new Human(true, true);
-    bot = new Bot(true, false, board.evaluate());
+    player1 = new Human(true, true);
+    player2 = new Bot(true, false, board.evaluate());
   }
 
-  private void play(Game game)
+  public Game(boolean twoPlayer)
   {
+    turn = 0;
+    board = new Board();
+    player1 = new Human(true, true);
+    player2 = new Bot(true, false, board.evaluate());
+    if(twoPlayer)
+    {
+      player1 = new Human(true, true);
+      player2 =  new Human(true, false);
+    }
   }
+
+  //On odd turns players with a true(white) colour make a turn.
+  //Each turn, the player inputs/generates a move.
+  //The piece being move checks whether the move is legal.
+  //If the move is legal, the move is made.
+  //then the game checks if the opposing king is now in check.
+  //  if in check, check for checkmate
+  //    if in checkmate. end the game
+  //  mark the king as in check
+  //add one to turns and loop round to the beginning.
+  private void play()
+  {
+    board.setBoard("rnbqkbnr/ppppp2p/8/5p2/6B1/8/PPPPPPPP/RN1QKBNR");
+    while (true)
+    {
+      Player currentPlayer = (turn % 2 == 0) ? player1 : player2;
+      board.setTurn(turn);
+      System.out.println("\n");
+      board.display();
+      System.out.println("\n");
+
+      // Prompt the player for a move input or generate a move programmatically
+      Move move = currentPlayer.getMove(board);
+
+      while(!board.isValidMove(move))
+      {
+        System.out.println("Move is illegal. Try Again.");
+        move = currentPlayer.getMove(board);
+      }
+
+      // Make the move on the board
+      board.makeMove(move);
+
+      // Check if the opposing king is now in check
+      boolean opposingColor = !currentPlayer.colour;
+      if (board.isKingInCheck(opposingColor))
+      {
+        //mark opposing king as in check
+        board.changeCheckStatus(opposingColor, true);
+        // If in check, check for checkmate
+        if (board.isCheckmate(opposingColor))
+        {
+          // End the game (checkmate)
+          String winner = (currentPlayer.colour)? "White":"Black";
+          System.out.println("Checkmate! " + winner + " wins!");
+          break;
+        }
+      }
+      else
+      {
+        // Opposing king is not in check
+        board.changeCheckStatus(opposingColor, false);
+      }
+
+      // Add one to turns and continue to the next turn
+      turn++;
+    }
+  }
+
 
   public int getTurn()
   {
@@ -26,18 +94,10 @@ public class Game {
     return board;
   }
 
-  public Player getHuman()
-  {
-    return human;
-  }
-
-  public Bot getBot()
-  {
-    return bot;
-  }
-
 
   public static void main(String[] args) {
-    Game game = new Game();
+    //index out of range when accessing h file
+    Game game = new Game(true);
+    game.play();
   }
 }

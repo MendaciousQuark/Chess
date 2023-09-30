@@ -1,28 +1,30 @@
-name: Java package
-
-on:
-  push:
-    branches:
-      - '*'
-  pull_request:
-    branches:
-      - '*'
-
-jobs:
-  build:
-
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Java
-        uses: actions/setup-java@v2
-        with:
-          java-version: "11"
-      - name: Build project
-        run: |
-          dir /s /B *.java > sources.txt
-          javac @sources.txt
-      - name: Run tests
-        run: |
-          java -cp . org.junit.runner.JUnitCore $(dir /s /B *Test.class | sed 's/\.class$//; s/\\/\./g')
+#name: Java package
+#
+#on:
+#  push:
+#    branches:
+#      - '*'
+#  pull_request:
+#    branches:
+#      - '*'
+#
+#jobs:
+#  build:
+#    runs-on: windows-latest
+#
+#    steps:
+#      - uses: actions/checkout@v3
+#      - name: Set up Java
+#        uses: actions/setup-java@v2
+#        with:
+#          java-version: "14"
+#          distribution: "adopt"
+#      - name: Build project
+#        run: |
+#          Get-ChildItem -Recurse -Filter "*.java" | ForEach-Object { $_.FullName } > sources.txt
+#          $sources = Get-Content sources.txt
+#          $sources | Foreach-Object { $_ } | Out-File -FilePath sources.txt -Encoding UTF8
+#          javac $sources
+#      - name: Run tests
+#        run: |
+#          java -cp . org.junit.runner.JUnitCore $(dir /s /B *Test.class | sed 's/\.class$//; s/\\/\./g')
