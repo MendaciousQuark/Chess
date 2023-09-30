@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class King extends Piece
 {
 
@@ -5,6 +7,7 @@ public class King extends Piece
   private boolean inCheck;
   private boolean canKingSideCastle;
   private boolean canQueenSideCastle;
+  public ArrayList<Piece> checkingPieces = new ArrayList<>();
 
   King(int posI, int posJ, boolean colour, int value)
   {
@@ -28,6 +31,10 @@ public class King extends Piece
     if(canQueenSideCastle || canKingSideCastle)
     {
       findCastleMoves(board, turn);
+    }
+    if(inCheck)
+    {
+      moves.removeIf(move -> remainsCheck(move, board));
     }
   }
 
@@ -195,4 +202,5 @@ public class King extends Piece
   {
     this.canQueenSideCastle = canQueenSideCastle;
   }
+
 }

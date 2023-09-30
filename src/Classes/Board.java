@@ -22,10 +22,6 @@ public class Board
     init();
     setUp(fen);
   }
-  Board(Square[][] board)
-  {
-    this.board = board;
-  }
 
   @Override
   public String toString()
@@ -93,28 +89,39 @@ public class Board
     return fen.toString();
   }
 
+  //sets up initial board position of any game
   private void init()
   {
     boolean colour;
+    //for each row on the board
     for(int i = 0; i < 8; i++)
     {
+      //determine the colour of the starting square
       colour = i % 2 == 0;
+      //for each column
       for(int j = 0; j < 8; j++)
       {
+        //place a piece depending on the location of the board we have reached (can be null)
         Piece piece = placePiece(i, j);
+        //if we have place a piece
         if(piece != null)
         {
-          if(piece instanceof King)
+          //if the placed piece is a King
+          if(piece instanceof King king)
           {
-            ((King) piece).setCanKingSideCastle(true);
-            ((King) piece).setCanQueenSideCastle(true);
+            //set the castling rights of that king
+            king.setCanKingSideCastle(true);
+            king.setCanQueenSideCastle(true);
           }
+          //initialise the square we are currently working on with a piece
           this.board[i][j] = new Square(i, j, colour, piece);
         }
         else
         {
+          //initialise the square we are currently working on without a piece
           this.board[i][j] = new Square(i, j, colour);
         }
+        //alternate the colour of the rest of the squares on the row
         colour = !colour;
       }
     }
@@ -125,27 +132,38 @@ public class Board
     Piece piece = null;
     boolean pieceColour;
 
+    //if we are in the top two rows of the Board
     if(i < 2)
     {
+      //the piece should be black
       pieceColour = false;
     }
+    //if we are in the bottom two rows off the board
     else if (i > 5)
     {
+      //the piece should be black
       pieceColour = true;
     }
+    //in any other case
     else
     {
+      //there shouldn't be a piece in the location
       return null;
     }
 
+    //In the second and penultimate row
     if(i == 1 || i==6)
     {
+      //initialise pawns
       piece = new Pawn(i, j, pieceColour, 1);
     }
+    //in the first and last row
     else
     {
+      //determine which square in the row we are on
       switch(j % 8)
       {
+        //initialise the corresponding piece
         case 0, 7 -> piece = new Rook(i, j, pieceColour, 5);
         case 1, 6 -> piece = new Knight(i, j, pieceColour, 3);
         case 2, 5 -> piece = new Bishop(i, j, pieceColour, 3);
@@ -153,6 +171,7 @@ public class Board
         case 4 -> piece = new King(i, j, pieceColour, 100);
       }
     }
+    //return the piece, so it can be added to the square.
     return piece;
   }
 
@@ -160,13 +179,17 @@ public class Board
   {
     ArrayList<Piece> piecesFound = new ArrayList<>();
 
+    //iterate through the whole board
     for(Square [] row: board)
     {
       for(Square square: row)
       {
+        //check the piece of each square
         Piece currentPiece = square.piece;
+        //if the piece is of the class we are looking for
         if(pieceClass.isInstance(currentPiece))
         {
+          //add the piece to the piece our list
           piecesFound.add(currentPiece);
         }
       }
@@ -175,12 +198,30 @@ public class Board
     return piecesFound;
   }
 
+  public King findKing(boolean colour)
+  {
+    King king = null;
+    //find all King pieces
+    ArrayList<Piece> kings = findPieces(King.class);
+    for(Piece piece: kings)
+    {
+      //determine which king is of the right colour
+      if(piece.colour == colour)
+      {
+        //assign that king
+        king = (King) piece;
+      }
+    }
+    //return the king
+    return king;
+  }
+
   public boolean isCheckmate(boolean colour)
   {
     //find all possible moves
     findMoves();
     //if colour is true (i.e. White), we need to check if black can still make moves
-    ArrayList<Move> movesToCheck = (colour)? blackMoves:whiteMoves;
+    ArrayList<Move> movesToCheck = (colour)? whiteMoves:blackMoves;
 
     //if there are no legal moves return true
     return movesToCheck.size() == 0;
@@ -188,21 +229,22 @@ public class Board
 
   public boolean isKingInCheck(boolean colour)
   {
-    ArrayList<Piece> kings =  findPieces(King.class);
-    for(Piece king: kings)
+    //find the king
+    King king = findKing(colour);
+    //target the kings square
+    Square targetSquare = getSquare(king.posI, king.posJ);
+
+    //check every piece that is attacking that square
+    for(Piece piece: targetSquare.attackingPieces)
     {
-      if(king.colour == colour)
+      //if it is an opposing piece
+      if(piece.colour != colour)
       {
-        Square targetSquare = getSquare(king.posI, king.posJ);
-        for(Piece piece: targetSquare.attackingPieces)
-        {
-          if(piece.colour != colour)
-          {
-            return true;
-          }
-        }
+        //check
+        return true;
       }
     }
+    //not check
     return false;
   }
 
@@ -220,6 +262,17 @@ public class Board
         King king = (King) piece;
         //change the check status
         king.setInCheck(checkStatus);
+
+        //check through every piece attacking the kings square
+        for(Piece attacker: getSquare(king.posI, king.posJ).attackingPieces)
+        {
+          //if opposing piece
+          if(attacker.colour != king.colour)
+          {
+            //add the piece to the ones giving check
+            king.checkingPieces.add(attacker);
+          }
+        }
       }
     }
   }
@@ -420,17 +473,36 @@ public class Board
         //if the square is occupied
         if(square.occupied)
         {
-            //find the legal moves for that piece
-            square.piece.findMoves(this, turn);
-            //depending on the colour of the piece add its moves to the relevant arraylist
-            if(square.piece.colour)
+          //find the legal moves for that piece
+          square.piece.findMoves(this, turn);
+          //for each found move
+          if(square.piece instanceof Pawn)
+          {
+            addPawnAttacks(square.piece);
+          }
+          else
+          {
+            for(Move move : square.piece.moves)
             {
-              whiteMoves.addAll(square.piece.moves);
+              //find the destination of the move
+              Square targetSquare = getSquare(move.getEnd()[0], move.getEnd()[1]);
+              //if the piece hasn't been added as an attacking piece
+              if(!targetSquare.attackingPieces.contains(move.getPiece()))
+              {
+                //add it
+                targetSquare.attackingPieces.add(move.getPiece());
+              }
             }
-            else
-            {
-              blackMoves.addAll((square.piece.moves));
-            }
+          }
+          //depending on the colour of the piece add its moves to the relevant arraylist
+          if(square.piece.colour)
+          {
+            whiteMoves.addAll(square.piece.moves);
+          }
+          else
+          {
+            blackMoves.addAll((square.piece.moves));
+          }
         }
       }
     }
@@ -480,15 +552,7 @@ public class Board
       Piece targetPiece = endSquare.piece;
       if(targetPiece instanceof Pawn)
       {
-        int rowOffset = (targetPiece.colour)? -1:1;
-        if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ + 1))
-        {
-          getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
-        }
-        if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ - 1))
-        {
-          getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
-        }
+        addPawnAttacks(targetPiece);
       }
       else
       {
@@ -496,10 +560,32 @@ public class Board
         for(Move foundMove : targetPiece.moves)
         {
           Square targetSquare = getSquare(foundMove.getEnd()[0], foundMove.getEnd()[1]);
-          targetSquare.attackingPieces.add(targetPiece);
+          if(!targetSquare.attackingPieces.contains(targetPiece))
+          {
+            targetSquare.attackingPieces.add(targetPiece);
+          }
         }
       }
       updateAttackedSquares();
+    }
+  }
+
+  private void addPawnAttacks(Piece targetPiece)
+  {
+    //determine the direction the pawn is moving in
+    int rowOffset = (targetPiece.colour)? -1:1;
+
+    //if right diagonal is a valid coordinate
+    if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ + 1))
+    {
+      //add the pawn to that squares attacking pieces
+      getSquare(targetPiece.posI + rowOffset, targetPiece.posJ + 1).attackingPieces.add(targetPiece);
+    }
+    //if left diagonal is a valid coordinate
+    if(isValidCoordinate(targetPiece.posI + rowOffset, targetPiece.posJ - 1))
+    {
+      //add the pawn to that squares attacking pieces
+      getSquare(targetPiece.posI + rowOffset, targetPiece.posJ - 1).attackingPieces.add(targetPiece);
     }
   }
 
@@ -585,18 +671,10 @@ public class Board
   {
     return turn;
   }
-  public void setWhiteMoves(ArrayList<Move> whiteMoves)
-  {
-    this.whiteMoves = whiteMoves;
-  }
-
-  public void setBlackMoves(ArrayList<Move> blackMoves)
-  {
-    this.blackMoves = blackMoves;
-  }
 
   public void setTurn(int turn)
   {
     this.turn = turn;
   }
+
 }

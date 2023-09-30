@@ -1,5 +1,3 @@
-import java.util.Iterator;
-
 public class Knight extends Piece
 {
 
@@ -16,6 +14,10 @@ public class Knight extends Piece
     findVerticalMoves(board, turn);
     //if the piece is pinned remove all moves that don't capture the pinning piece
     removeMovesIfPinned(board);
+    if(board.findKing(this.colour).isInCheck())
+    {
+      moves.removeIf(move -> remainsCheck(move, board));
+    }
   }
 
 

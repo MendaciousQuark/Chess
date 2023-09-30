@@ -36,6 +36,7 @@ public class Game {
   //add one to turns and loop round to the beginning.
   private void play()
   {
+    board.setBoard("rnbqkbnr/ppppp2p/8/5p2/6B1/8/PPPPPPPP/RN1QKBNR");
     while (true)
     {
       Player currentPlayer = (turn % 2 == 0) ? player1 : player2;
@@ -60,6 +61,8 @@ public class Game {
       boolean opposingColor = !currentPlayer.colour;
       if (board.isKingInCheck(opposingColor))
       {
+        //mark opposing king as in check
+        board.changeCheckStatus(opposingColor, true);
         // If in check, check for checkmate
         if (board.isCheckmate(opposingColor))
         {
@@ -67,11 +70,6 @@ public class Game {
           String winner = (currentPlayer.colour)? "White":"Black";
           System.out.println("Checkmate! " + winner + " wins!");
           break;
-        }
-        else
-        {
-          // Mark the opposing king as in check
-          board.changeCheckStatus(opposingColor, true);
         }
       }
       else

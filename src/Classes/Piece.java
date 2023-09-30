@@ -52,7 +52,6 @@ public abstract class Piece
     {
       moves.add(newMove);
     }
-
   }
 
   protected void addCaptureMove(Board board, int turn, int destI, int destJ)
@@ -181,20 +180,8 @@ public abstract class Piece
       //get the square this piece is on
       Square currentSquare = board.getSquare(this.posI, this.posJ);
 
-      // get all kings on the board
-      ArrayList<Piece> kings = board.findPieces(King.class);
-
-      //placeholder king Declaration
-      King king = new King(0, 0, false, 100);
-      for(Piece piece: kings)
-      {
-        if(piece.colour == this.colour)
-        {
-          // point king to the King of the same colour as this piece
-          king = (King) piece;
-          break;
-        }
-      }
+      //find this piece's king
+      King king = board.findKing(this.colour);
 
       //for every piece attacking this square
       for(Piece attackingPiece: currentSquare.attackingPieces)
@@ -205,7 +192,7 @@ public abstract class Piece
           if(attackingPiece instanceof Queen || attackingPiece instanceof Bishop || attackingPiece instanceof Rook)
           {
             //check the direction it is attacking from
-            int[] attackDirection = getAttackDirection(attackingPiece);
+            int[] attackDirection = getAttackDirection(attackingPiece, this);
             if(attackDirection != null)
             {
               int rowOffset = attackDirection[0];
@@ -272,9 +259,6 @@ public abstract class Piece
     {
       // If the coordinates are invalid, print an error message
       System.err.println("Invalid coordinates for move");
-
-      // Exit the program with an error code of 1
-      System.exit(1);
     }
 
     // Return false if the move does not free the pin
@@ -284,7 +268,7 @@ public abstract class Piece
   protected boolean staysInPin(Move move, Board board)
   {
     //get attack direction of the pinning piece
-    int[] attackDirection = getAttackDirection(pinningPiece);
+    int[] attackDirection = getAttackDirection(pinningPiece, this);
     //reverse the direction, so we can iterate towards the pinning piece
     attackDirection[0] = attackDirection[0] * -1;
     attackDirection[1] = attackDirection[1] * -1;
@@ -309,10 +293,98 @@ public abstract class Piece
     return false;
   }
 
-  protected int[] getAttackDirection(Piece attackingPiece)
+  protected boolean remainsCheck(Move move, Board board)
   {
-    int[] diagonalDirection = getDiagonalAttackDirection(attackingPiece);
-    int[] straightLineDirection = getStraightLineAttackDirection(attackingPiece);
+    //find this piece's king
+    King king = board.findKing(this.colour);
+
+    try
+    {
+      //if there is only one piece giving check
+      if(king.checkingPieces.size() == 1 && !(this instanceof King))
+      {
+        //get that attacker
+        Piece attacker = king.checkingPieces.get(0);
+
+        //if the attacker is a Knight
+        if(attacker instanceof Knight)
+        {
+          //The piece must be captured as check from a knight can't be blocked.
+          return move.getEnd()[0] != attacker.posI || move.getEnd()[1] != attacker.posJ;
+        }
+
+        //determine its attack direction and position
+        int[] attackDirection = getAttackDirection(attacker, king);
+        int row = attacker.posI, col = attacker.posJ;
+        int rowOffset = attackDirection[0], colOffset = attackDirection[1];
+
+        //we start onn the attacking pieces' square to account for capture moves
+        Square currentSquare = board.getSquare(row, col);
+        Square kingSquare = board.getSquare(king.posI, king.posJ);
+
+        //while we haven't reached our own king (we can place a piece in front of the attacker)
+        while(kingSquare != currentSquare)
+        {
+          //if we can block the attacker with this move
+          if(move.getEnd()[0] == row && move.getEnd()[1] == col)
+          {
+            //this move can remove check
+            return false;
+          }
+          row += rowOffset;
+          col += colOffset;
+          currentSquare = board.getSquare(row, col);
+        }
+      }
+      //if there are more than one checking pieces, the king needs to be moved
+      //if this piece is a king
+      else if(this instanceof King)
+      {
+        //THIS IS PARTIALLY INCORRECT
+        //CURRENTLY ALLOWS MOVING WITH THE DIRECTION OF ATTACK
+        //check all the pieces attacking the move's target square
+        for(Piece attacker: king.checkingPieces)
+        {
+          //if the attacker is a knight, there is no need to check any further attacks
+          if(!(attacker instanceof Knight))
+          {
+            //otherwise, we have to ensure that the king is not moving further along the attacking pieces path
+            int[] attackDirection = getAttackDirection(attacker, king);
+            int row = king.posI, col = king.posJ;
+            int rowOffset = attackDirection[0], colOffset = attackDirection[1];
+            //if the move is still along the path
+            if((move.getEnd()[0] == row + rowOffset) && (move.getEnd()[1] == col + colOffset))
+            {
+              //this move would remain in check
+              return true;
+            }
+          }
+        }
+        for(Piece piece : board.getSquare(move.getEnd()[0], move.getEnd()[1]).attackingPieces)
+        {
+          //if the piece is opposing
+          if(piece.colour != this.colour)
+          {
+            //can't move here (still check)
+            return true;
+          }
+        }
+        //otherwise, we can safely move here
+        return false;
+      }
+    }
+    catch(NullPointerException e)
+    {
+      System.err.println("Tried to determine size of king.checkingPieces while null");
+    }
+    //move doesn't remove check
+    return true;
+  }
+
+  protected int[] getAttackDirection(Piece attackingPiece, Piece attackedPiece)
+  {
+    int[] diagonalDirection = getDiagonalAttackDirection(attackingPiece, attackedPiece);
+    int[] straightLineDirection = getStraightLineAttackDirection(attackingPiece, attackedPiece);
 
     // Check if either diagonalDirection or straightLineDirection indicates an attack
     if (diagonalDirection[0] != 0 && diagonalDirection[1] != 0)
@@ -332,9 +404,9 @@ public abstract class Piece
     }
   }
 
-  private int[] getDiagonalAttackDirection(Piece attackingPiece) {
-    int rowDiff = this.posI - attackingPiece.posI;
-    int colDiff = this.posJ - attackingPiece.posJ;
+  private int[] getDiagonalAttackDirection(Piece attackingPiece, Piece attackedPiece) {
+    int rowDiff = attackedPiece.posI - attackingPiece.posI;
+    int colDiff = attackedPiece.posJ - attackingPiece.posJ;
 
     int[] direction = new int[2];
 
@@ -369,10 +441,10 @@ public abstract class Piece
     return direction;
   }
 
-  private int[] getStraightLineAttackDirection(Piece attackingPiece)
+  private int[] getStraightLineAttackDirection(Piece attackingPiece, Piece attackedPiece)
   {
-    int rowDiff = this.posI - attackingPiece.posI;
-    int colDiff = this.posJ - attackingPiece.posJ;
+    int rowDiff = attackedPiece.posI - attackingPiece.posI;
+    int colDiff = attackedPiece.posJ - attackingPiece.posJ;
 
     int[] direction = {0, 0};
 

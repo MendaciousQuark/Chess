@@ -172,11 +172,18 @@ public class KingTests
   @Test
   public void testMoveOutOfCheck()
   {
-    board.setBoard("r3k2r/ppp1np1p/3p2p1/2b1pb1N/Q1P1P2q/BPN2P2/P2PB1PP/R2nK2R");
+    board.setBoard("r3k2r/ppp1np1p/3p2p1/2b1pb1N/1QP1P2q/BPN2P2/P2PB1PP/R2nK2R");
     board.findMoves();
 
     King king = (King) board.getSquare(7, 4).piece;
     king.setInCheck(true);
+    for(Piece piece: board.getSquare(7, 4).attackingPieces)
+    {
+      if(king.colour != piece.colour)
+      {
+        king.checkingPieces.add(piece);
+      }
+    }
     king.moves.clear();
     king.findMoves(board, turn);
 
@@ -237,6 +244,34 @@ public class KingTests
     Assertions.assertTrue(king.moves.contains(trueMove1));
     Assertions.assertFalse(king.moves.contains(falseMove1));
     Assertions.assertFalse(king.moves.contains(falseMove2));
+  }
+
+  @Test
+  public void testInCheck()
+  {
+    //testing for one piece giving check
+    board.setBoard("rnb1kbnr/ppppqppp/7R/Q7/3PK3/5NB1/PPP1PPPP/RN3B1R");
+    board.findMoves();
+
+    King king = (King) board.getSquare(4, 4).piece;
+    king.checkingPieces.add(board.getSquare(1,4).piece);
+    king.setInCheck(true);
+
+    board.findMoves();
+    Assertions.assertEquals(8, board.getWhiteMoves().size());
+
+    king.setInCheck(false);
+
+    board.setBoard("rnb1kb1r/pppp1ppp/5n1R/Q4q2/3PK3/5NB1/PPP1PPPP/RN3B1R");
+    board.findMoves();
+
+    king = (King) board.getSquare(4, 4).piece;
+    king.setInCheck(true);
+    king.checkingPieces.add(board.getSquare(2, 5).piece);
+    king.checkingPieces.add(board.getSquare(3, 5).piece);
+
+    board.findMoves();
+    Assertions.assertEquals(2, board.getWhiteMoves().size());
   }
 
 }
