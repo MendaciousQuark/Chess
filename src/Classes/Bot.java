@@ -13,6 +13,10 @@ public class Bot  extends Player
 
   }
 
+  protected Piece promotePawn(Pawn pawn)
+  {
+    return null;
+  }
   @Override
   protected Move getMove(Board board)
   {

@@ -156,8 +156,8 @@ public class BoardTests
 
   @Test
   public void testEvaluate() {
-    // Implement the test to check if the evaluate method returns the expected evaluation score
-    // Create a test case with a specific board setup and assert the evaluation score based on the expected outcome
+    board.setBoard("8/3k4/3pp3/3nn3/3NN3/2P1KP2/8/8");
+    System.out.println(board.evaluate());
   }
 
   @Test

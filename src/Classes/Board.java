@@ -464,6 +464,9 @@ public class Board
     blackMoves.clear();
     whiteMoves.clear();
 
+    King blackKing = findKing(false);
+    King whiteKing = findKing(true);
+
     //for each row
     for(Square [] row: board)
     {
@@ -473,39 +476,40 @@ public class Board
         //if the square is occupied
         if(square.occupied)
         {
-          //find the legal moves for that piece
-          square.piece.findMoves(this, turn);
-          //for each found move
-          if(square.piece instanceof Pawn)
+          //skip over finding king moves as they require each attacked square to be marked as such
+          if(!(square.piece instanceof King))
           {
-            addPawnAttacks(square.piece);
-          }
-          else
-          {
-            for(Move move : square.piece.moves)
+            //find the legal moves for that piece
+            square.piece.findMoves(this, turn);
+            //for each found move
+            if(square.piece instanceof Pawn)
             {
-              //find the destination of the move
-              Square targetSquare = getSquare(move.getEnd()[0], move.getEnd()[1]);
-              //if the piece hasn't been added as an attacking piece
-              if(!targetSquare.attackingPieces.contains(move.getPiece()))
-              {
-                //add it
-                targetSquare.attackingPieces.add(move.getPiece());
-              }
+              addPawnAttacks(square.piece);
+            }
+            else
+            {
+              addPieceAttacks(square.piece);
+            }
+
+            //depending on the colour of the piece add its moves to the relevant arraylist
+            if(square.piece.colour)
+            {
+              whiteMoves.addAll(square.piece.moves);
+            }
+            else
+            {
+              blackMoves.addAll((square.piece.moves));
             }
           }
-          //depending on the colour of the piece add its moves to the relevant arraylist
-          if(square.piece.colour)
-          {
-            whiteMoves.addAll(square.piece.moves);
-          }
-          else
-          {
-            blackMoves.addAll((square.piece.moves));
-          }
+
         }
       }
     }
+    //now that all squares that are attacked are marked as attacked, we can find the king moves
+    blackKing.findMoves(this, turn);
+    blackMoves.addAll(blackKing.moves);
+    whiteKing.findMoves(this, turn);
+    whiteMoves.addAll(whiteKing.moves);
   }
 
   public boolean isValidMove(Move move)
@@ -522,51 +526,87 @@ public class Board
 
   public void makeMove(Move move)
   {
+    //create a temporary board
     Board tempBoard = this.copy();
+
     Square startSquare = tempBoard.getSquare(move.getStart()[0], move.getStart()[1]);
     Square endSquare = tempBoard.getSquare(move.getEnd()[0], move.getEnd()[1]);
 
+    //get the moved piece
     Piece movedPiece = startSquare.piece;
+
+    //update the position of the moved piece
     movedPiece.posI = endSquare.posI;
     movedPiece.posJ = endSquare.posJ;
 
+    //update the destination square's data
     endSquare.piece = movedPiece;
     endSquare.occupied = true;
     startSquare.piece = null;
     startSquare.occupied = false;
 
+    //iterate through the temporary board
     for(int i = 0; i < 8; i++)
     {
       for(int j = 0; j < 8; j++)
       {
         Piece oldPiece, newPiece = null;
+        //if the square on the tempBoard is occupied
         if(tempBoard.board[i][j].occupied)
         {
+          //deep copy the piece
           oldPiece = tempBoard.board[i][j].piece;
           newPiece = oldPiece.copy();
         }
+        //point the original boards' square to the square of the copy
         this.board[i][j] = tempBoard.board[i][j];
+        //do the same with piece
         this.board[i][j].piece = newPiece;
       }
 
       Piece targetPiece = endSquare.piece;
+
+      //if the moved piece is a pawn
       if(targetPiece instanceof Pawn)
       {
+        //add the diagonally adjacent square as attacked squares
         addPawnAttacks(targetPiece);
       }
+      //for every other piece type
       else
       {
+        //find the legal moves of the piece
         targetPiece.findMoves(this, move.getTurn() + 1);
+        //iterate through the moves
         for(Move foundMove : targetPiece.moves)
         {
+          //get the target square of the move
           Square targetSquare = getSquare(foundMove.getEnd()[0], foundMove.getEnd()[1]);
+          //if the piece hasn't been added as an attacking piece
           if(!targetSquare.attackingPieces.contains(targetPiece))
           {
+            //add it as an attacking piece
             targetSquare.attackingPieces.add(targetPiece);
           }
         }
       }
+      //remove any pieces from the attacking pieces arraylist if they aren't attacking it anymore
       updateAttackedSquares();
+    }
+  }
+
+  private void addPieceAttacks(Piece piece)
+  {
+    for(Move move : piece.moves)
+    {
+      //find the destination of the move
+      Square targetSquare = getSquare(move.getEnd()[0], move.getEnd()[1]);
+      //if the piece hasn't been added as an attacking piece
+      if(!targetSquare.attackingPieces.contains(move.getPiece()))
+      {
+        //add it
+        targetSquare.attackingPieces.add(move.getPiece());
+      }
     }
   }
 
@@ -591,27 +631,36 @@ public class Board
 
   private void updateAttackedSquares()
   {
+    //for each square on the boar
     for (Square[] row : board)
     {
       for (Square square : row)
       {
+        //if there are attacking pieces
         if (!square.attackingPieces.isEmpty())
         {
+          //iterate through each attacking piece
           Iterator<Piece> iterator = square.attackingPieces.iterator();
           while (iterator.hasNext())
           {
             Piece piece = iterator.next();
+            //find the moves the piece can make
             piece.findMoves(this, 0);
             boolean pieceStillAttacking = false;
+            //for every move
             for (Move move : piece.moves)
             {
+              //if the move ends on the current square
               if (move.getEnd()[0] == square.posI && move.getEnd()[1] == square.posJ)
               {
+                //there is no need to get rid of this piece
                 pieceStillAttacking = true;
                 break;
               }
             }
+            //if the piece doesn't attack this square anymore
             if (!pieceStillAttacking) {
+              //remove it from the attacking list
               iterator.remove(); // Remove the piece using Iterator.
             }
           }
@@ -622,7 +671,53 @@ public class Board
 
   public double evaluate()
   {
-    return 0.0;
+    findMoves();
+
+    double evaluation = 0;
+    // Iterate through the entire board
+    for (int i = 0; i < 8; i++)
+    {
+      for (int j = 0; j < 8; j++)
+      {
+        Square square = getSquare(i, j);
+        if (square.occupied)
+        {
+          Piece piece = square.piece;
+          double pieceValue = piece.getValue(this);
+
+          // Add or subtract piece value based on its color
+          if (piece.colour)
+          {
+            evaluation += pieceValue;
+          }
+          else
+          {
+            evaluation -= pieceValue;
+          }
+        }
+      }
+    }
+
+    // Check for checkmate and check positions
+    boolean whiteInCheck = isKingInCheck(true);
+    boolean blackInCheck = isKingInCheck(false);
+
+    if(whiteInCheck)
+    {
+      evaluation -= 50; // White is in checkmate
+    }
+    if(blackInCheck)
+    {
+      evaluation += 50; // White is in checkmate
+    }
+    if (isCheckmate(true)) {
+      evaluation -= 1000.0; // White is in checkmate
+    }
+    if (isCheckmate(false)) {
+      evaluation += 1000.0; // Black is in checkmate
+    }
+
+    return  evaluation*0.1;
   }
 
   public Square[][] getBoard()

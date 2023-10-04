@@ -462,6 +462,40 @@ public abstract class Piece
     return direction;
   }
 
+  protected double getValue(Board board)
+  {
+    double currentValue = this.value;
+    this.findMoves(board, board.getTurn());
+    for(Move move: moves)
+    {
+      if(move.isCapture())
+      {
+        currentValue += 0.5;
+      }
+      else
+      {
+        currentValue += 0.25;
+      }
+    }
+
+    Square currentSquare = board.getSquare(this.posI, this.posJ);
+    double safetyMultiplier = 1;
+    for(Piece piece: currentSquare.attackingPieces)
+    {
+      if(piece.colour == this.colour)
+      {
+        safetyMultiplier += 0.1;
+      }
+      else
+      {
+        safetyMultiplier += -0.1;
+      }
+    }
+    currentValue += safetyMultiplier*10;
+
+    return currentValue;
+  }
+
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
