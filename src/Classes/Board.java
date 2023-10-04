@@ -216,7 +216,7 @@ public class Board
     return king;
   }
 
-  public boolean isCheckmate(boolean colour)
+  public boolean isCheckOrStalemate(boolean colour)
   {
     //find all possible moves
     findMoves();
@@ -710,11 +710,11 @@ public class Board
     {
       evaluation += 50; // White is in checkmate
     }
-    if (isCheckmate(true)) {
-      evaluation -= 1000.0; // White is in checkmate
+    if (isCheckOrStalemate(true)) {
+      evaluation -= 10000.0; // White is in checkmate
     }
-    if (isCheckmate(false)) {
-      evaluation += 1000.0; // Black is in checkmate
+    if (isCheckOrStalemate(false)) {
+      evaluation += 10000.0; // Black is in checkmate
     }
 
     return  evaluation*0.1;

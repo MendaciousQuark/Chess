@@ -81,7 +81,7 @@ public class Game {
         //mark opposing king as in check
         board.changeCheckStatus(opposingColor, true);
         // If in check, check for checkmate
-        if (board.isCheckmate(opposingColor))
+        if (board.isCheckOrStalemate(opposingColor))
         {
           // End the game (checkmate)
           String winner = (currentPlayer.colour)? "White":"Black";
@@ -91,6 +91,12 @@ public class Game {
       }
       else
       {
+        //if not in check but there are no more move
+        if(board.isCheckOrStalemate(opposingColor))
+        {
+          System.out.println("Stalemate... no one wins!");
+          break;
+        }
         // Opposing king is not in check
         board.changeCheckStatus(opposingColor, false);
       }
