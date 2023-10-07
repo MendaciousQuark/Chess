@@ -11,19 +11,23 @@ public class Game {
     turn = 0;
     board = new Board();
     player1 = new Human(true, true);
-    player2 = new Bot(true, false, board.evaluate());
+    player2 = new Bot(true, false);
   }
 
-  public Game(boolean twoPlayer)
+  public Game(boolean singlePlayer)
   {
     turn = 0;
     board = new Board();
-    player1 = new Human(true, true);
-    player2 = new Bot(true, false, board.evaluate());
-    if(twoPlayer)
+
+    if(!singlePlayer)
     {
       player1 = new Human(true, true);
       player2 =  new Human(true, false);
+    }
+    else
+    {
+      player1 = new Human(true, true);
+      player2 = new Bot(true, false);
     }
   }
 
@@ -38,7 +42,6 @@ public class Game {
   //add one to turns and loop round to the beginning.
   private void play()
   {
-    board.setBoard("k7/3Q4/2N5/8/8/8/6K1/8");
     while (true)
     {
       System.out.println(board.evaluate());

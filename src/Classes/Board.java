@@ -198,6 +198,18 @@ public class Board
     return piecesFound;
   }
 
+  public ArrayList<Piece> findAllPieces()
+  {
+    ArrayList<Piece> allPieces = new ArrayList<>();
+    allPieces.addAll(findPieces(King.class));
+    allPieces.addAll(findPieces(Queen.class));
+    allPieces.addAll(findPieces(Rook.class));
+    allPieces.addAll(findPieces(Bishop.class));
+    allPieces.addAll(findPieces(Knight.class));
+    allPieces.addAll(findPieces(Pawn.class));
+    return allPieces;
+  }
+
   public King findKing(boolean colour)
   {
     King king = null;
