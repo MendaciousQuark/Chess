@@ -1,3 +1,4 @@
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Human  extends Player
@@ -94,5 +95,47 @@ public class Human  extends Player
       //return a non-king move
       return new Move(board, start, end, movedPiece, colour, board.getTurn(), isCapture, false, false);
     }
+  }
+
+  protected Piece promotePawn(Pawn pawn)
+  {
+    Piece piece = null;
+    Scanner scanner = new Scanner(System.in);
+
+    System.out.println("Pawn promotion options:");
+    System.out.println("Enter 'q' for Queen");
+    System.out.println("Enter 'r' for Rook");
+    System.out.println("Enter 'k' for Knight");
+    System.out.println("Enter 'b' for Bishop");
+
+    String promotionChoice;
+    do {
+      System.out.print("Choose the piece type to promote your pawn to: ");
+      promotionChoice = scanner.nextLine().toLowerCase();
+    } while (!validPromotionChoice(promotionChoice));
+
+    switch(promotionChoice)
+    {
+      case "q" -> piece = new Queen(pawn.posI, pawn.posJ, pawn.colour, 9);
+      case "r" -> piece = new Rook(pawn.posI, pawn.posJ, pawn.colour, 6);
+      case "k" -> piece = new Knight(pawn.posI, pawn.posJ, pawn.colour, 3);
+      case "b" -> piece = new Bishop(pawn.posI, pawn.posJ, pawn.colour, 3);
+    }
+
+    return piece;
+  }
+
+  private boolean validPromotionChoice(String promotionChoice)
+  {
+    String[] validChoices = {"q", "r", "k", "b"};
+    promotionChoice = promotionChoice.toLowerCase();
+    for(String validString: validChoices)
+    {
+      if(promotionChoice.equals(validString))
+      {
+        return true;
+      }
+    }
+    return false;
   }
 }

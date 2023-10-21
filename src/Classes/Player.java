@@ -1,4 +1,4 @@
-public class Player
+public abstract class Player
 {
   protected boolean castle;
   protected boolean colour;
@@ -31,4 +31,6 @@ public class Player
 
     return new int[]{rank, file};
   }
+
+  protected abstract Piece promotePawn(Pawn pawn);
 }
